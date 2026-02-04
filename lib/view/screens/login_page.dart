@@ -1,24 +1,38 @@
 import 'package:flutter/material.dart';
+import 'package:safe_space/controller/auth_services.dart';
 import 'package:safe_space/model/colors.dart';
 import 'package:safe_space/view/screens/signup_page.dart';
 import 'package:safe_space/view/widgets/cMaterialButton.dart';
 import 'package:safe_space/view/widgets/cTextField.dart';
 
 class LoginPage extends StatefulWidget {
-  const LoginPage({super.key});
+  LoginPage({super.key});
 
   @override
   State<LoginPage> createState() => _LoginPageState();
 }
 
 class _LoginPageState extends State<LoginPage> {
+  final emailController = TextEditingController();
+
+  final passwordController = TextEditingController();
+
+  @override
+  void dispose() {
+    emailController.dispose();
+    passwordController.dispose();
+    super.dispose();
+  }
+
+  final AuthController _authController = AuthController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFF211402),
+      backgroundColor: Color(0xFF211402),
       body: Center(
         child: Padding(
-          padding: const EdgeInsets.all(25.0),
+          padding: EdgeInsets.all(25.0),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -33,12 +47,13 @@ class _LoginPageState extends State<LoginPage> {
                   fontWeight: FontWeight.w900,
                 ),
               ),
-              const SizedBox(height: 10),
-              const GlowingTextField(
+              SizedBox(height: 10),
+              GlowingTextField(
                 hint: "Enter your email",
                 icon: Icons.email,
+                textController: emailController,
               ),
-              const SizedBox(height: 35),
+              SizedBox(height: 35),
               Text(
                 "Password",
                 style: TextStyle(
@@ -47,14 +62,24 @@ class _LoginPageState extends State<LoginPage> {
                   fontWeight: FontWeight.w900,
                 ),
               ),
-              const SizedBox(height: 10),
-              const GlowingTextField(
+              SizedBox(height: 10),
+              GlowingTextField(
                 hint: "Enter your password",
                 icon: Icons.lock_open_rounded,
                 isPassword: true,
+                textController: passwordController,
               ),
-              const SizedBox(height: 35),
-              cMaterialButton(buttonFunction: () {}, text: "Sign In"),
+              SizedBox(height: 35),
+              cMaterialButton(
+                onPressed: () {
+                  _authController.signIn(
+                    context,
+                    email: emailController.text,
+                    password: passwordController.text,
+                  );
+                },
+                text: "Sign In",
+              ),
               SizedBox(height: 35),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -65,9 +90,9 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                   GestureDetector(
                     onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (_) => SignupPage()),
+                      Navigator.of(context).pushAndRemoveUntil(
+                        MaterialPageRoute(builder: (context) => SignupPage()),
+                        (Route<dynamic> route) => false,
                       );
                     },
                     child: Text(

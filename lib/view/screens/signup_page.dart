@@ -1,16 +1,34 @@
 import 'package:flutter/material.dart';
 import 'package:safe_space/model/colors.dart';
+import 'package:safe_space/view/screens/login_page.dart';
+import 'package:safe_space/view/widgets/cLogo.dart';
 import 'package:safe_space/view/widgets/cMaterialButton.dart';
 import 'package:safe_space/view/widgets/cTextField.dart';
 
+import '../../controller/auth_services.dart';
+
 class SignupPage extends StatefulWidget {
-  const SignupPage({super.key});
+  SignupPage({super.key});
 
   @override
   State<SignupPage> createState() => _SignupPageState();
 }
 
 class _SignupPageState extends State<SignupPage> {
+  final AuthController authController = AuthController();
+
+  final emailController = TextEditingController();
+  final passwordController = TextEditingController();
+  final confirmPasswordController = TextEditingController();
+
+  @override
+  void dispose() {
+    emailController.dispose();
+    passwordController.dispose();
+    confirmPasswordController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -19,12 +37,18 @@ class _SignupPageState extends State<SignupPage> {
         children: [
           Center(
             child: Padding(
-              padding: const EdgeInsets.all(25.0),
+              padding: EdgeInsets.all(25.0),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text("Sign Up to SafeSpace", style: TextStyle(fontSize: 30)),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text("Sign Up to ", style: TextStyle(fontSize: 25)),
+                      cLogo(fontSize: 35),
+                    ],
+                  ),
                   SizedBox(height: 55),
                   Text(
                     "Email Address",
@@ -34,12 +58,13 @@ class _SignupPageState extends State<SignupPage> {
                       fontWeight: FontWeight.w900,
                     ),
                   ),
-                  const SizedBox(height: 10),
-                  const GlowingTextField(
+                  SizedBox(height: 10),
+                  GlowingTextField(
                     hint: "Enter your email",
                     icon: Icons.email,
+                    textController: emailController,
                   ),
-                  const SizedBox(height: 35),
+                  SizedBox(height: 35),
                   Text(
                     "Password",
                     style: TextStyle(
@@ -48,13 +73,14 @@ class _SignupPageState extends State<SignupPage> {
                       fontWeight: FontWeight.w900,
                     ),
                   ),
-                  const SizedBox(height: 10),
-                  const GlowingTextField(
+                  SizedBox(height: 10),
+                  GlowingTextField(
                     hint: "Enter your password",
                     icon: Icons.lock_open_rounded,
                     isPassword: true,
+                    textController: passwordController,
                   ),
-                  const SizedBox(height: 35),
+                  SizedBox(height: 35),
                   Text(
                     "Confirm Password",
                     style: TextStyle(
@@ -63,16 +89,36 @@ class _SignupPageState extends State<SignupPage> {
                       fontWeight: FontWeight.w900,
                     ),
                   ),
-                  const SizedBox(height: 10),
-                  const GlowingTextField(
+                  SizedBox(height: 10),
+                  GlowingTextField(
                     hint: "Re-type your password",
                     icon: Icons.lock_open_rounded,
                     isPassword: true,
+                    textController: confirmPasswordController,
                   ),
 
-                  const SizedBox(height: 35),
+                  SizedBox(height: 35),
+                  cMaterialButton(
+                    text: "Sign Up Now",
+                    onPressed: () {
+                      if (passwordController.text.trim() !=
+                          confirmPasswordController.text.trim()) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text("Passwords do not match"),
+                          ),
+                        );
+                        return;
+                      }
 
-                  cMaterialButton(buttonFunction: () {}, text: "Sign Up Now"),
+                      authController.signUp(
+                        context,
+                        email: emailController.text,
+                        password: passwordController.text,
+                      );
+                    },
+                  ),
+
                   SizedBox(height: 35),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -83,9 +129,11 @@ class _SignupPageState extends State<SignupPage> {
                       ),
                       GestureDetector(
                         onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (_) => SignupPage()),
+                          Navigator.of(context).pushAndRemoveUntil(
+                            MaterialPageRoute(
+                              builder: (context) => LoginPage(),
+                            ),
+                            (Route<dynamic> route) => false,
                           );
                         },
                         child: Text(

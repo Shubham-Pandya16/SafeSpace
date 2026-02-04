@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:safe_space/view/screens/login_page.dart';
+import 'package:safe_space/controller/auth_gate.dart';
 import 'package:safe_space/view/widgets/cLogo.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -26,7 +26,7 @@ class _SplashScreenState extends State<SplashScreen> {
 
   nextScreen() {
     Navigator.of(context).pushAndRemoveUntil(
-      MaterialPageRoute(builder: (context) => LoginPage()),
+      MaterialPageRoute(builder: (context) => AuthGate()),
       (Route<dynamic> route) => false,
     );
   }

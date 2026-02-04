@@ -1,30 +1,26 @@
 import 'package:flutter/material.dart';
 
-class cMaterialButton extends StatefulWidget {
-  final Function() buttonFunction;
-  final text;
+class cMaterialButton extends StatelessWidget {
+  final String text;
+  final VoidCallback onPressed;
+
   const cMaterialButton({
     super.key,
-    required this.buttonFunction,
     required this.text,
+    required this.onPressed,
   });
 
   @override
-  State<cMaterialButton> createState() => _cMaterialButtonState();
-}
-
-class _cMaterialButtonState extends State<cMaterialButton> {
-  @override
   Widget build(BuildContext context) {
     return MaterialButton(
-      onPressed: widget.buttonFunction,
+      onPressed: onPressed,
       minWidth: double.infinity,
       height: 65,
-      color: Color(0xFF926247),
+      color: const Color(0xFF926247),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
       child: Text(
-        widget.text,
-        style: TextStyle(
+        text,
+        style: const TextStyle(
           color: Colors.white,
           fontSize: 18,
           fontWeight: FontWeight.w900,

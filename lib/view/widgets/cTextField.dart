@@ -4,12 +4,14 @@ import 'package:safe_space/model/colors.dart';
 class GlowingTextField extends StatefulWidget {
   final String hint;
   final IconData icon;
+  final TextEditingController textController;
   final bool isPassword;
 
   const GlowingTextField({
     super.key,
     required this.hint,
     required this.icon,
+    required this.textController,
     this.isPassword = false,
   });
 
@@ -57,6 +59,7 @@ class _GlowingTextFieldState extends State<GlowingTextField> {
     // child:
     TextFormField(
       // focusNode: _focusNode,
+      controller: widget.textController,
       keyboardType: TextInputType.emailAddress,
       obscureText: widget.isPassword,
       style: const TextStyle(color: Colors.white, fontSize: 16),
