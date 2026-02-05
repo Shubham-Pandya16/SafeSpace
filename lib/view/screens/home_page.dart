@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:safe_space/view/screens/assessment_page.dart';
 import 'package:safe_space/view/screens/channels_page.dart';
 import 'package:safe_space/view/screens/chatbot_page.dart';
 import 'package:safe_space/view/widgets/cLogo.dart';
@@ -39,6 +40,16 @@ class _HomePageState extends State<HomePage> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(builder: (_) => ChannelsPage()),
+                );
+              },
+            ),
+            SizedBox(height: 50),
+            cMaterialButton(
+              text: "Self Assessment Page",
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (_) => AssessmentPage()),
                 );
               },
             ),
