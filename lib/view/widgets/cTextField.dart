@@ -6,6 +6,7 @@ class GlowingTextField extends StatefulWidget {
   final IconData icon;
   final TextEditingController textController;
   final bool isPassword;
+  final Color borderColor;
 
   const GlowingTextField({
     super.key,
@@ -13,6 +14,7 @@ class GlowingTextField extends StatefulWidget {
     required this.icon,
     required this.textController,
     this.isPassword = false,
+    this.borderColor = AppColors.green,
   });
 
   @override
@@ -87,7 +89,7 @@ class _GlowingTextFieldState extends State<GlowingTextField> {
 
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(30),
-          borderSide: BorderSide(color: AppColors.green, width: 1.6),
+          borderSide: BorderSide(color: widget.borderColor, width: 3),
         ),
       ),
       // ),

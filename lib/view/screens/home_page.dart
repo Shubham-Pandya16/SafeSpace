@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:safe_space/view/screens/chatbot_page.dart';
 import 'package:safe_space/view/widgets/cLogo.dart';
 import 'package:safe_space/view/widgets/cMaterialButton.dart';
 
@@ -21,6 +22,16 @@ class _HomePageState extends State<HomePage> {
       body: Center(
         child: Column(
           children: [
+            cMaterialButton(
+              text: "AI Chatbot",
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (_) => ChatBotPage()),
+                );
+              },
+            ),
+            SizedBox(height: 50),
             cMaterialButton(
               text: "SignOut",
               onPressed: () {

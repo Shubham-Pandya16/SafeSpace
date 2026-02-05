@@ -3,12 +3,12 @@ import 'package:google_fonts/google_fonts.dart';
 
 import '../../model/colors.dart';
 
-class cLogo extends StatelessWidget {
+class cText extends StatelessWidget {
   final double fontSize;
   final String text;
   final Color color;
 
-  const cLogo({
+  const cText({
     super.key,
     this.text = "SafeSpace.",
     required this.fontSize,
@@ -21,7 +21,6 @@ class cLogo extends StatelessWidget {
       text,
       style: GoogleFonts.calSans(
         fontSize: fontSize,
-        letterSpacing: -2,
         color: color,
       ),
     );
