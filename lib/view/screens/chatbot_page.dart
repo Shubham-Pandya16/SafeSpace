@@ -4,6 +4,7 @@ import 'package:safe_space/model/colors.dart';
 import 'package:safe_space/view/widgets/cLogo.dart';
 import 'package:safe_space/view/widgets/cTextField.dart';
 
+import '../../controller/apiKey.dart';
 import '../../model/system_prompt.dart';
 import '../widgets/cText.dart';
 import '../widgets/message.dart';
@@ -17,7 +18,6 @@ class ChatBotPage extends StatefulWidget {
 
 class _ChatBotPageState extends State<ChatBotPage> {
   final TextEditingController _userInput = TextEditingController();
-  final apikey = "AIzaSyC3Wf4ht_Xpbv3nV_2Bug4yNf85BqGeC5g";
 
   final List<Message> _messages = [];
 
@@ -89,7 +89,11 @@ class _ChatBotPageState extends State<ChatBotPage> {
       body: Column(
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
-          Flexible(
+          // Padding(
+          //   padding: const EdgeInsets.symmetric(vertical: 25),
+          //   child: cText(fontSize: 14, text: "How are you feeling today?"),
+          // ),
+          Expanded(
             child: ListView.builder(
               itemCount: _messages.length,
               itemBuilder: (context, i) {
@@ -97,7 +101,6 @@ class _ChatBotPageState extends State<ChatBotPage> {
                 return Messages(
                   isUser: message.isUser,
                   message: message.message,
-                  // date: DateFormat("HH:mm").format(message.date),
                 );
               },
             ),
@@ -111,7 +114,7 @@ class _ChatBotPageState extends State<ChatBotPage> {
 
                 child: GlowingTextField(
                   borderColor: AppColors.lightBrown,
-                  hint: "Type to start chatting.. ",
+                  hint: "How are you feeling today?",
                   icon: Icons.edit,
                   textController: _userInput,
                 ),

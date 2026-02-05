@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:safe_space/controller/auth_gate.dart';
+import 'package:safe_space/model/colors.dart';
 import 'package:safe_space/view/widgets/cLogo.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -34,7 +35,7 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color.fromRGBO(241, 239, 231, 01.0),
+      backgroundColor: AppColors.brown,
       body: Center(child: cLogo(fontSize: 60)),
     );
   }

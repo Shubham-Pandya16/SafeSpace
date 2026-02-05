@@ -12,13 +12,13 @@ class Message {
 class Messages extends StatelessWidget {
   final bool isUser;
   final String message;
-  final String date;
+  final String? date;
 
   const Messages({
     super.key,
     required this.isUser,
     required this.message,
-    this.date = "",
+    this.date,
   });
 
   @override
@@ -45,12 +45,25 @@ class Messages extends StatelessWidget {
           Text(
             message,
             style: TextStyle(
-              // fontWeight: FontWeight.w100,
+              fontWeight: FontWeight.w900,
               fontSize: 16,
+              letterSpacing: 1,
+              wordSpacing: 0,
               color: isUser ? Colors.white70 : Colors.white,
             ),
           ),
-          // Text(date),
+          if (date != null)
+            Padding(
+              padding: const EdgeInsets.only(top: 6),
+              child: Text(
+                date!,
+                style: TextStyle(
+                  fontSize: 12,
+                  fontWeight: FontWeight.bold,
+                  color: isUser ? Colors.white54 : Colors.white70,
+                ),
+              ),
+            ),
         ],
       ),
     );

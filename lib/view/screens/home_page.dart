@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:safe_space/view/screens/channels_page.dart';
 import 'package:safe_space/view/screens/chatbot_page.dart';
 import 'package:safe_space/view/widgets/cLogo.dart';
 import 'package:safe_space/view/widgets/cMaterialButton.dart';
@@ -28,6 +29,16 @@ class _HomePageState extends State<HomePage> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(builder: (_) => ChatBotPage()),
+                );
+              },
+            ),
+            SizedBox(height: 50),
+            cMaterialButton(
+              text: "Community Group Chat",
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (_) => ChannelsPage()),
                 );
               },
             ),
