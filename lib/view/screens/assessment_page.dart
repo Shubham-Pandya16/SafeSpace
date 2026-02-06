@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:safe_space/controller/assessment_state.dart';
 import 'package:safe_space/model/colors.dart';
+import 'package:safe_space/view/screens/assessment_result_page.dart';
 
 class AssessmentPage extends StatefulWidget {
   const AssessmentPage({super.key});
@@ -35,9 +36,7 @@ class _AssessmentPageState extends State<AssessmentPage> {
     if (_assessmentState.currentQuestion == null) {
       return const Scaffold(
         backgroundColor: Color(0xFF211402),
-        body: Center(
-          child: Text('Assessment not available'),
-        ),
+        body: Center(child: Text('Assessment not available')),
       );
     }
 
@@ -48,29 +47,32 @@ class _AssessmentPageState extends State<AssessmentPage> {
           children: [
             // Header with progress
             _buildHeader(context, _assessmentState),
-            
+
             // Main content
             Expanded(
               child: SingleChildScrollView(
-                padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 24),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 24,
+                  vertical: 24,
+                ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     // Disclaimer
                     _buildDisclaimer(),
                     const SizedBox(height: 32),
-                    
+
                     // Current question
                     _buildQuestion(_assessmentState),
                     const SizedBox(height: 32),
-                    
+
                     // Radio options
                     _buildRadioOptions(context, _assessmentState),
                   ],
                 ),
               ),
             ),
-            
+
             // Navigation buttons
             _buildNavigation(context, _assessmentState),
           ],
@@ -110,7 +112,7 @@ class _AssessmentPageState extends State<AssessmentPage> {
             ),
           ),
           const SizedBox(height: 12),
-          
+
           // Progress bar
           ClipRRect(
             borderRadius: BorderRadius.circular(8),
@@ -143,11 +145,7 @@ class _AssessmentPageState extends State<AssessmentPage> {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Icon(
-            Icons.info_outline,
-            color: AppColors.lightestBrowm,
-            size: 20,
-          ),
+          Icon(Icons.info_outline, color: AppColors.lightestBrowm, size: 20),
           const SizedBox(width: 12),
           Expanded(
             child: Text(
@@ -204,24 +202,21 @@ class _AssessmentPageState extends State<AssessmentPage> {
     final currentAnswer = state.getCurrentAnswer();
 
     return Column(
-      children: List.generate(
-        question.options.length,
-        (index) {
-          final isSelected = currentAnswer == index;
-          
-          return Padding(
-            padding: const EdgeInsets.only(bottom: 12),
-            child: GestureDetector(
-              onTap: () => state.saveAnswer(index),
-              child: _buildOptionCard(
-                option: question.options[index],
-                isSelected: isSelected,
-                index: index,
-              ),
+      children: List.generate(question.options.length, (index) {
+        final isSelected = currentAnswer == index;
+
+        return Padding(
+          padding: const EdgeInsets.only(bottom: 12),
+          child: GestureDetector(
+            onTap: () => state.saveAnswer(index),
+            child: _buildOptionCard(
+              option: question.options[index],
+              isSelected: isSelected,
+              index: index,
             ),
-          );
-        },
-      ),
+          ),
+        );
+      }),
     );
   }
 
@@ -238,9 +233,7 @@ class _AssessmentPageState extends State<AssessmentPage> {
             ? AppColors.lightestBrowm.withOpacity(0.2)
             : AppColors.mediumBrown.withOpacity(0.5),
         border: Border.all(
-          color: isSelected
-              ? AppColors.lightestBrowm
-              : AppColors.mediumBrown,
+          color: isSelected ? AppColors.lightestBrowm : AppColors.mediumBrown,
           width: isSelected ? 2 : 1,
         ),
         borderRadius: BorderRadius.circular(12),
@@ -270,11 +263,7 @@ class _AssessmentPageState extends State<AssessmentPage> {
               color: isSelected ? AppColors.lightestBrowm : Colors.transparent,
             ),
             child: isSelected
-                ? const Icon(
-                    Icons.check,
-                    size: 14,
-                    color: AppColors.brown,
-                  )
+                ? const Icon(Icons.check, size: 14, color: AppColors.brown)
                 : null,
           ),
           const SizedBox(width: 16),
@@ -327,9 +316,9 @@ class _AssessmentPageState extends State<AssessmentPage> {
             )
           else
             const Expanded(child: SizedBox.shrink()),
-          
+
           if (canGoBack) const SizedBox(width: 12),
-          
+
           // Next/Finish button
           Expanded(
             child: state.isLoading
@@ -451,28 +440,17 @@ class _AssessmentPageState extends State<AssessmentPage> {
     AssessmentState state,
   ) async {
     try {
-      await state.submitAssessment();
-      
-      if (!mounted) return;
-      
-      // Show success message
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Assessment completed successfully!'),
-          duration: Duration(seconds: 2),
-          backgroundColor: AppColors.lightestBrowm,
-        ),
-      );
+      final int score = await state.submitAssessment();
 
-      // Navigate back
-      Future.delayed(const Duration(seconds: 2), () {
-        if (mounted) {
-          Navigator.pop(context);
-        }
-      });
+      if (!mounted) return;
+
+      // Navigate to results page (score used internally only)
+      Navigator.of(context).push(
+        MaterialPageRoute(builder: (_) => AssessmentResultPage(score: score)),
+      );
     } catch (e) {
       if (!mounted) return;
-      
+
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(state.errorMessage ?? 'Failed to submit assessment'),

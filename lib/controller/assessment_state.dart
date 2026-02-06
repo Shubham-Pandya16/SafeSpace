@@ -97,7 +97,7 @@ class AssessmentState extends ChangeNotifier {
     return totalScore.clamp(0, 100);
   }
 
-  Future<void> submitAssessment() async {
+  Future<int> submitAssessment() async {
     isLoading = true;
     errorMessage = null;
     notifyListeners();
@@ -118,6 +118,8 @@ class AssessmentState extends ChangeNotifier {
 
       isLoading = false;
       notifyListeners();
+
+      return score;
     } catch (e) {
       isLoading = false;
       errorMessage = 'Failed to submit assessment: ${e.toString()}';

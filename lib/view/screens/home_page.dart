@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:safe_space/view/screens/assessment_page.dart';
 import 'package:safe_space/view/screens/channels_page.dart';
 import 'package:safe_space/view/screens/chatbot_page.dart';
+import 'package:safe_space/view/screens/relax_and_reset_page.dart';
 import 'package:safe_space/view/widgets/cLogo.dart';
 import 'package:safe_space/view/widgets/cMaterialButton.dart';
 
@@ -50,6 +51,16 @@ class _HomePageState extends State<HomePage> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(builder: (_) => AssessmentPage()),
+                );
+              },
+            ),
+            SizedBox(height: 50),
+            cMaterialButton(
+              text: "Relax and Reset Page",
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (_) => RelaxAndResetPage()),
                 );
               },
             ),

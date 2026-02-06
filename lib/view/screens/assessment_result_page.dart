@@ -1,14 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:safe_space/model/colors.dart';
+import 'package:safe_space/view/screens/home_page.dart';
 
 class AssessmentResultPage extends StatefulWidget {
   final int score;
 
-  const AssessmentResultPage({
-    super.key,
-    required this.score,
-  });
+  const AssessmentResultPage({super.key, required this.score});
 
   @override
   State<AssessmentResultPage> createState() => _AssessmentResultPageState();
@@ -50,14 +48,14 @@ class _AssessmentResultPageState extends State<AssessmentResultPage> {
         category: 'High emotional burden',
         categoryColor: const Color(0xFFDC8B4B),
         largeMessage:
-            'Things feel heavy at the moment. Please consider talking to someone—a friend, family member, or counselor. You don\'t have to carry this alone. Support is available.',
+            'Things may feel heavy right now. When you\'re ready, talking with a friend, family member, or someone you trust can help. You don\'t have to carry this alone.',
       );
     } else {
       return _ResultData(
         category: 'Very high distress',
         categoryColor: const Color(0xFFD97A5D),
         largeMessage:
-            'You\'re going through a really difficult time. Please reach out for support now. Talking to someone—whether it\'s a trusted person or a professional—can make a real difference.',
+            'You\'re going through a very hard time. It may help to reach out to someone you trust or to explore support options when you\'re ready. Many people find talking to others helpful.',
       );
     }
   }
@@ -69,7 +67,10 @@ class _AssessmentResultPageState extends State<AssessmentResultPage> {
       body: SafeArea(
         child: SingleChildScrollView(
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 20.0),
+            padding: const EdgeInsets.symmetric(
+              horizontal: 24.0,
+              vertical: 20.0,
+            ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
@@ -134,86 +135,96 @@ class _AssessmentResultPageState extends State<AssessmentResultPage> {
   }
 
   Widget _buildScoreCard(BuildContext context) {
-    final progress = widget.score / 100.0;
+    // Map score into a segment index (0..4) without showing the numeric value
+    final int segmentIndex;
+    final int s = widget.score;
+    if (s <= 20) {
+      segmentIndex = 0;
+    } else if (s <= 40) {
+      segmentIndex = 1;
+    } else if (s <= 60) {
+      segmentIndex = 2;
+    } else if (s <= 80) {
+      segmentIndex = 3;
+    } else {
+      segmentIndex = 4;
+    }
+
+    final segmentColors = [
+      AppColors.green,
+      const Color(0xFFC7D86D),
+      const Color(0xFFE6B66F),
+      const Color(0xFFDC8B4B),
+      const Color(0xFFD97A5D),
+    ];
 
     return Container(
       decoration: BoxDecoration(
         gradient: LinearGradient(
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
-          colors: [
-            AppColors.lightBrown,
-            AppColors.mediumBrown,
-          ],
+          colors: [AppColors.lightBrown, AppColors.mediumBrown],
         ),
         borderRadius: BorderRadius.circular(20),
       ),
-      padding: const EdgeInsets.all(32),
+      padding: const EdgeInsets.all(20),
       child: Column(
         children: [
-          // Circular progress indicator
-          SizedBox(
-            height: 140,
-            width: 140,
-            child: Stack(
-              alignment: Alignment.center,
-              children: [
-                // Background circle
-                Container(
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: Colors.white.withOpacity(0.1),
-                  ),
-                ),
-                // Progress ring
-                CircularProgressIndicator(
-                  value: progress,
-                  strokeWidth: 8,
-                  backgroundColor: Colors.white.withOpacity(0.15),
-                  valueColor: AlwaysStoppedAnimation<Color>(
-                    _resultData.categoryColor,
-                  ),
-                ),
-                // Score text in center
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      widget.score.toString(),
-                      textAlign: TextAlign.center,
-                      style: GoogleFonts.calSans(
-                        fontSize: 48,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                      ),
-                    ),
-                    Text(
-                      'out of 100',
-                      style: GoogleFonts.calSans(
-                        fontSize: 12,
-                        color: Colors.white70,
-                        letterSpacing: 0.3,
-                      ),
-                    ),
-                  ],
-                ),
-              ],
+          // Soft label
+          Text(
+            'How things feel right now',
+            style: GoogleFonts.calSans(
+              fontSize: 16,
+              color: Colors.white,
+              fontWeight: FontWeight.w700,
             ),
           ),
 
-          const SizedBox(height: 24),
+          const SizedBox(height: 16),
 
-          // Progress bar
-          ClipRRect(
-            borderRadius: BorderRadius.circular(8),
-            child: LinearProgressIndicator(
-              value: progress,
-              minHeight: 8,
-              backgroundColor: Colors.white.withOpacity(0.15),
-              valueColor: AlwaysStoppedAnimation<Color>(
-                _resultData.categoryColor,
-              ),
+          // Segmented visual indicator (non-numeric)
+          Container(
+            padding: const EdgeInsets.all(6),
+            decoration: BoxDecoration(
+              color: Colors.white.withOpacity(0.04),
+              borderRadius: BorderRadius.circular(14),
             ),
+            child: Row(
+              children: List.generate(5, (i) {
+                final isActive = i == segmentIndex;
+                return Expanded(
+                  child: AnimatedContainer(
+                    duration: const Duration(milliseconds: 300),
+                    margin: EdgeInsets.only(left: i == 0 ? 0 : 6),
+                    height: isActive ? 20 : 14,
+                    decoration: BoxDecoration(
+                      color: isActive
+                          ? segmentColors[i].withOpacity(0.95)
+                          : segmentColors[i].withOpacity(0.3),
+                      borderRadius: BorderRadius.circular(8),
+                      boxShadow: isActive
+                          ? [
+                              BoxShadow(
+                                color: Colors.black.withOpacity(0.25),
+                                blurRadius: 6,
+                                offset: const Offset(0, 2),
+                              ),
+                            ]
+                          : null,
+                    ),
+                  ),
+                );
+              }),
+            ),
+          ),
+
+          const SizedBox(height: 12),
+
+          // Gentle caption
+          Text(
+            'This reflects how much emotional strain you may be experiencing recently.',
+            textAlign: TextAlign.center,
+            style: GoogleFonts.calSans(fontSize: 13, color: Colors.white70),
           ),
         ],
       ),
@@ -305,19 +316,13 @@ class _AssessmentResultPageState extends State<AssessmentResultPage> {
       child: Container(
         decoration: BoxDecoration(
           color: AppColors.lightBrown.withOpacity(0.5),
-          border: Border.all(
-            color: AppColors.mediumBrown,
-            width: 1,
-          ),
+          border: Border.all(color: AppColors.mediumBrown, width: 1),
           borderRadius: BorderRadius.circular(12),
         ),
         padding: const EdgeInsets.all(14),
         child: Row(
           children: [
-            Text(
-              action.icon,
-              style: const TextStyle(fontSize: 24),
-            ),
+            Text(action.icon, style: const TextStyle(fontSize: 24)),
             const SizedBox(width: 12),
             Expanded(
               child: Column(
@@ -379,11 +384,12 @@ class _AssessmentResultPageState extends State<AssessmentResultPage> {
       height: 56,
       child: MaterialButton(
         onPressed: () {
-          Navigator.of(context).pop();
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (_) => HomePage()),
+          );
         },
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(28),
-        ),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(28)),
         color: AppColors.lightestBrowm,
         child: Text(
           'Close',

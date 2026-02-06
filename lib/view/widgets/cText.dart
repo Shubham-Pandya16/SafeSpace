@@ -7,12 +7,14 @@ class cText extends StatelessWidget {
   final double fontSize;
   final String text;
   final Color color;
+  final double letterSpacing;
 
   const cText({
     super.key,
     this.text = "SafeSpace.",
     required this.fontSize,
     this.color = AppColors.lightGrey,
+    this.letterSpacing = 0.8,
   });
 
   @override
@@ -22,6 +24,7 @@ class cText extends StatelessWidget {
       style: GoogleFonts.calSans(
         fontSize: fontSize,
         color: color,
+        letterSpacing: letterSpacing,
       ),
     );
   }
