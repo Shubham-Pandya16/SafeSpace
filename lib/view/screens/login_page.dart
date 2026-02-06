@@ -31,79 +31,85 @@ class _LoginPageState extends State<LoginPage> {
     return Scaffold(
       backgroundColor: Color(0xFF211402),
       body: Center(
-        child: Padding(
-          padding: EdgeInsets.all(25.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text("Sign In to SafeSpace", style: TextStyle(fontSize: 30)),
-              SizedBox(height: 55),
-              Text(
-                "Email Address",
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 18,
-                  fontWeight: FontWeight.w900,
-                ),
-              ),
-              SizedBox(height: 10),
-              GlowingTextField(
-                hint: "Enter your email",
-                icon: Icons.email,
-                textController: emailController,
-              ),
-              SizedBox(height: 35),
-              Text(
-                "Password",
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 18,
-                  fontWeight: FontWeight.w900,
-                ),
-              ),
-              SizedBox(height: 10),
-              GlowingTextField(
-                hint: "Enter your password",
-                icon: Icons.lock_open_rounded,
-                isPassword: true,
-                textController: passwordController,
-              ),
-              SizedBox(height: 35),
-              cMaterialButton(
-                onPressed: () {
-                  _authController.signIn(
-                    context,
-                    email: emailController.text,
-                    password: passwordController.text,
-                  );
-                },
-                text: "Sign In",
-              ),
-              SizedBox(height: 35),
-              Row(
+        child: ListView(
+          children: [
+            Padding(
+              padding: EdgeInsets.all(25.0),
+              child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  Text("Sign In to SafeSpace", style: TextStyle(fontSize: 30)),
+                  SizedBox(height: 55),
                   Text(
-                    "Don't have an account?",
-                    style: TextStyle(color: Colors.white),
+                    "Email Address",
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 18,
+                      fontWeight: FontWeight.w900,
+                    ),
                   ),
-                  GestureDetector(
-                    onTap: () {
-                      Navigator.of(context).pushAndRemoveUntil(
-                        MaterialPageRoute(builder: (context) => SignupPage()),
-                        (Route<dynamic> route) => false,
+                  SizedBox(height: 10),
+                  GlowingTextField(
+                    hint: "Enter your email",
+                    icon: Icons.email,
+                    textController: emailController,
+                  ),
+                  SizedBox(height: 35),
+                  Text(
+                    "Password",
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 18,
+                      fontWeight: FontWeight.w900,
+                    ),
+                  ),
+                  SizedBox(height: 10),
+                  GlowingTextField(
+                    hint: "Enter your password",
+                    icon: Icons.lock_open_rounded,
+                    isPassword: true,
+                    textController: passwordController,
+                  ),
+                  SizedBox(height: 35),
+                  cMaterialButton(
+                    onPressed: () {
+                      _authController.signIn(
+                        context,
+                        email: emailController.text,
+                        password: passwordController.text,
                       );
                     },
-                    child: Text(
-                      " Sign Up Now",
-                      style: TextStyle(color: AppColors.green),
-                    ),
+                    text: "Sign In",
+                  ),
+                  SizedBox(height: 35),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        "Don't have an account?",
+                        style: TextStyle(color: Colors.white),
+                      ),
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.of(context).pushAndRemoveUntil(
+                            MaterialPageRoute(
+                              builder: (context) => SignupPage(),
+                            ),
+                            (Route<dynamic> route) => false,
+                          );
+                        },
+                        child: Text(
+                          " Sign Up Now",
+                          style: TextStyle(color: AppColors.green),
+                        ),
+                      ),
+                    ],
                   ),
                 ],
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );

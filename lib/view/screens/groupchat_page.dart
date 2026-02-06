@@ -24,7 +24,7 @@ class GroupchatPage extends StatefulWidget {
 
 class _GroupchatPageState extends State<GroupchatPage> {
   bool _isUser(String msgUid) {
-    if (FirebaseAuth.instance.currentUser!.uid == msgUid) {
+    if (FirebaseAuth.instance.currentUser?.uid == msgUid) {
       return true;
     } else {
       return false;
