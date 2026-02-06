@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:safe_space/model/colors.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../widgets/cText.dart';
+
 class VideoResource {
   final String id;
   final String name;
@@ -84,6 +86,22 @@ class _MindfulResourcesPageState extends State<MindfulResourcesPage> {
     final media = MediaQuery.of(context).size;
 
     return Scaffold(
+      appBar: AppBar(
+        leading: GestureDetector(
+          onTap: () => Navigator.pop(context),
+          child: Icon(Icons.arrow_back_ios_new, size: 20, color: Colors.grey),
+        ),
+        toolbarHeight: 75,
+        title: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [cText(fontSize: 30, text: "Mindful Resources")],
+        ),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.vertical(bottom: Radius.circular(25)),
+        ),
+        backgroundColor: AppColors.mediumBrown,
+      ),
       backgroundColor: AppColors.lightestBrowm.withOpacity(0.3),
       body: SafeArea(
         child: FutureBuilder<List<VideoResource>>(
@@ -149,25 +167,16 @@ class _MindfulResourcesPageState extends State<MindfulResourcesPage> {
               slivers: [
                 SliverToBoxAdapter(
                   child: Padding(
-                    padding: const EdgeInsets.fromLTRB(20, 24, 20, 8),
+                    padding: const EdgeInsets.fromLTRB(20, 20, 20, 8),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          'Mindful Resources',
-                          style: TextStyle(
-                            color: AppColors.brown,
-                            fontSize: 28,
-                            fontWeight: FontWeight.w700,
-                          ),
-                        ),
-                        const SizedBox(height: 8),
-                        Text(
                           'Short videos to help you pause, breathe, and reset',
                           style: TextStyle(
-                            color: AppColors.lightBrown.withOpacity(0.8),
+                            color: Colors.white70,
                             fontSize: 14,
-                            height: 1.5,
+                            fontWeight: FontWeight.bold,
                           ),
                         ),
                       ],
@@ -198,7 +207,7 @@ class _MindfulResourcesPageState extends State<MindfulResourcesPage> {
                       child: Text(
                         'More Resources',
                         style: TextStyle(
-                          color: AppColors.brown,
+                          color: Colors.white70,
                           fontSize: 16,
                           fontWeight: FontWeight.w600,
                         ),

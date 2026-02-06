@@ -193,6 +193,23 @@ class _RelaxAndResetPageState extends State<RelaxAndResetPage>
 
     return Scaffold(
       backgroundColor: _bgStart,
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        centerTitle: true,
+        leading: GestureDetector(
+          onTap: () => Navigator.pop(context),
+          child: Icon(Icons.arrow_back_ios_new, size: 20, color: _accent),
+        ),
+        toolbarHeight: 85,
+        title: Text(
+          'Relax & Reset',
+          style: TextStyle(
+            color: _accent,
+            fontSize: 20,
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+      ),
       body: SafeArea(
         child: Container(
           decoration: BoxDecoration(
@@ -204,30 +221,6 @@ class _RelaxAndResetPageState extends State<RelaxAndResetPage>
           ),
           child: Column(
             children: [
-              const SizedBox(height: 24),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      'Relax & Reset',
-                      style: TextStyle(
-                        color: _accent,
-                        fontSize: 20,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                    Text(
-                      _exercise == ExerciseType.box ? 'Box' : '4-7-8',
-                      style: TextStyle(
-                        color: _accent.withOpacity(0.9),
-                        fontSize: 14,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
               const SizedBox(height: 24),
               // Breathing visual area
               Expanded(
