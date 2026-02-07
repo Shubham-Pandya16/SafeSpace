@@ -126,6 +126,7 @@ $userInputMessage
         //     color: Colors.grey,
         //   ),
         // ),
+        leading: Container(),
         toolbarHeight: 75,
         title: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
