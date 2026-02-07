@@ -170,7 +170,7 @@ $userInputMessage
                 const SizedBox(width: 6),
                 MaterialButton(
                   onPressed: _isThinking ? null : geminiResponseCall,
-                  color: const Color(0xFF926247),
+                  color: AppColors.accentTeal,
                   shape: const CircleBorder(),
                   padding: const EdgeInsets.all(14),
                   child: const Icon(Icons.send),

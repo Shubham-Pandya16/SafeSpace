@@ -4,11 +4,20 @@ import 'package:safe_space/model/colors.dart';
 import 'package:safe_space/view/screens/assessment_page.dart';
 import 'package:safe_space/view/screens/channels_page.dart';
 import 'package:safe_space/view/screens/chatbot_page.dart';
-import 'package:safe_space/view/screens/mindful_resources_page.dart';
 import 'package:safe_space/view/screens/relax_and_reset_page.dart';
+import 'package:safe_space/view/widgets/cLogo.dart';
+import 'package:safe_space/view/widgets/mindful_resources_page.dart';
 
-import '../widgets/cLogo.dart';
-
+/// HomePage is designed for emotion-driven navigation.
+///
+/// Design Philosophy:
+/// Users in different emotional states see intentional guidance:
+/// - PRIMARY: Self-Assessment (clear, supportive entry point)
+/// - SECONDARY: Community + Resources (two gentle options)
+/// - AVAILABLE: Relax & Reset (immediate relief)
+/// - ACCESSIBLE: Chat via bottom navigation (for goal-driven users)
+///
+/// This structure reduces decision fatigue and suits users who feel unsure.
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
 
@@ -34,37 +43,48 @@ class _HomePageState extends State<HomePage> {
       backgroundColor: AppColors.brown,
       appBar: _buildAppBar(),
       body: SafeArea(
-        child: SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(
-              horizontal: 20.0,
-              vertical: 16.0,
+        child: Stack(
+          children: [
+            SingleChildScrollView(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 20.0,
+                  vertical: 16.0,
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    _buildGreetingSection(),
+                    const SizedBox(height: 16),
+
+                    _buildMoodCard(),
+                    const SizedBox(height: 24),
+
+                    _buildDailyQuoteCard(),
+                    const SizedBox(height: 28),
+
+                    // PRIMARY ACTION: Self Assessment
+                    _buildHeadingText('What you need right now'),
+                    const SizedBox(height: 12),
+                    _buildSelfAssessmentCard(context),
+                    const SizedBox(height: 28),
+
+                    // SECONDARY ACTIONS: Community & Resources
+                    _buildHeadingText('Find support'),
+                    const SizedBox(height: 12),
+                    _buildTwoActionCards(context),
+                    const SizedBox(height: 28),
+
+                    // ACCESSIBLE ACTIONS: Additional options
+                    _buildHeadingText('Other resources'),
+                    const SizedBox(height: 12),
+                    _buildSubtleChatOption(context),
+                    const SizedBox(height: 100),
+                  ],
+                ),
+              ),
             ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                // Greeting Section
-                _buildGreetingSection(),
-                const SizedBox(height: 24),
-
-                // Daily Quote Card (Increased Height)
-                _buildDailyQuoteCard(),
-                const SizedBox(height: 24),
-
-                // Self Assessment Card
-                _buildSelfAssessmentCard(context),
-                const SizedBox(height: 20),
-
-                // Two Quick Action Cards (Community & Resources)
-                _buildTwoActionCards(context),
-                const SizedBox(height: 20),
-
-                // SafeSpace.AI Full Width Card
-                _buildSafeSpaceAICard(context),
-                const SizedBox(height: 100), // Space for FAB
-              ],
-            ),
-          ),
+          ],
         ),
       ),
       floatingActionButton: _buildRelaxResetFAB(context),
@@ -74,67 +94,19 @@ class _HomePageState extends State<HomePage> {
 
   AppBar _buildAppBar() {
     return AppBar(
-      backgroundColor: AppColors.brown,
-      elevation: 0,
-      toolbarHeight: 65,
       centerTitle: true,
-      title: Expanded(
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            CircleAvatar(
-              backgroundColor: AppColors.mediumBrown,
-              child: Center(
-                child: Text(
-                  'S',
-                  style: GoogleFonts.urbanist(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
-                  ),
-                ),
-              ),
-            ),
-            Center(child: cLogo(fontSize: 32)),
-          ],
-        ),
+      title: Padding(
+        padding: const EdgeInsets.only(bottom: 15.0),
+        child: cLogo(fontSize: 32),
       ),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(bottom: Radius.circular(25)),
+      ),
+      backgroundColor: AppColors.mediumBrown,
     );
   }
 
-  // AppBar _buildAppBar() {
-  //   return AppBar(
-  //     backgroundColor: AppColors.brown,
-  //     elevation: 0,
-  //     toolbarHeight: 65,
-  //     leading: Padding(
-  //       padding: const EdgeInsets.all(8.0),
-  //       child: Container(
-  //         decoration: BoxDecoration(
-  //           color: AppColors.mediumBrown,
-  //           shape: BoxShape.circle,
-  //         ),
-  //         child: Center(
-  //           child: Text(
-  //             'S',
-  //             style: GoogleFonts.urbanist(
-  //               fontSize: 20,
-  //               fontWeight: FontWeight.bold,
-  //               color: Colors.white,
-  //             ),
-  //           ),
-  //         ),
-  //       ),
-  //     ),
-  //     actions: [
-  //       Padding(
-  //         padding: const EdgeInsets.only(right: 16.0),
-  //         child: Center(child: cLogo(fontSize: 32)),
-  //       ),
-  //     ],
-  //   );
-  // }
-
+  /// Emotional greeting that validates the user's state
   Widget _buildGreetingSection() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -147,7 +119,6 @@ class _HomePageState extends State<HomePage> {
             color: Colors.white,
           ),
         ),
-        const SizedBox(height: 6),
         Text(
           'How are you feeling today?',
           style: GoogleFonts.urbanist(
@@ -160,6 +131,60 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
+  /// Soft section heading for navigation hierarchy
+  Widget _buildHeadingText(String text) {
+    return Text(
+      text,
+      style: GoogleFonts.urbanist(
+        fontSize: 14,
+        fontWeight: FontWeight.w600,
+        color: AppColors.lightGrey,
+        letterSpacing: 0.5,
+      ),
+    );
+  }
+
+  /// Mood tracking card: lightweight, non-intrusive, supportive
+  Widget _buildMoodCard() {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: AppColors.lightBrown,
+        borderRadius: BorderRadius.circular(16),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                'How are you feeling today?',
+                style: GoogleFonts.urbanist(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w600,
+                  color: Colors.white,
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 12),
+          _MoodSelector(),
+          const SizedBox(height: 12),
+          Text(
+            'Track your mood to understand yourself better.',
+            style: GoogleFonts.urbanist(
+              fontSize: 12,
+              color: AppColors.lightGrey,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  /// Daily inspirational quote for emotional grounding
   Widget _buildDailyQuoteCard() {
     final quotes = [
       '"There is hope, even when your brain tells you there isn\'t."',
@@ -177,7 +202,6 @@ class _HomePageState extends State<HomePage> {
     return Container(
       width: double.infinity,
       height: 280,
-      // Increased height
       padding: const EdgeInsets.all(28),
       decoration: BoxDecoration(
         color: AppColors.mediumBrown,
@@ -205,7 +229,6 @@ class _HomePageState extends State<HomePage> {
               ),
             ),
           ),
-          // Day indicators
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
@@ -236,6 +259,10 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
+  /// PRIMARY ACTION: Self-Assessment Questionnaire
+  ///
+  /// Positioned first in the supporting actions to encourage self-reflection
+  /// as the primary entry point for users unsure of their state.
   Widget _buildSelfAssessmentCard(BuildContext context) {
     return Container(
       width: double.infinity,
@@ -276,7 +303,7 @@ class _HomePageState extends State<HomePage> {
                     ),
                     const SizedBox(height: 4),
                     Text(
-                      'Assess yourself with psychological\nscreening tools such as GAD-7, PHQ-9,\nPHQ-15, WHO-5.',
+                      'Understand your wellbeing with\npsychological screening tools',
                       style: GoogleFonts.urbanist(
                         fontSize: 12,
                         color: AppColors.lightGrey,
@@ -311,7 +338,7 @@ class _HomePageState extends State<HomePage> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
-                        'TRY ME OUT',
+                        'GET STARTED',
                         style: GoogleFonts.urbanist(
                           fontSize: 14,
                           fontWeight: FontWeight.bold,
@@ -335,25 +362,30 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
+  /// SECONDARY ACTIONS: Community & Resources
+  ///
+  /// Two equal-weight options for users seeking support:
+  /// - Community: Human connection and peer support
+  /// - Resources: Self-guided learning and coping tools
   Widget _buildTwoActionCards(BuildContext context) {
     return Row(
       children: [
-        // Community Card
         Expanded(
           child: _buildActionCard(
             context,
             icon: Icons.people_outline,
             label: 'Community',
+            description: 'Connect with others',
             page: const ChannelsPage(),
           ),
         ),
         const SizedBox(width: 16),
-        // Resources Card
         Expanded(
           child: _buildActionCard(
             context,
             icon: Icons.play_circle_outline,
             label: 'Resources',
+            description: 'Learn & cope',
             page: const MindfulResourcesPage(),
           ),
         ),
@@ -361,10 +393,12 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
+  /// Individual action card with icon and label
   Widget _buildActionCard(
     BuildContext context, {
     required IconData icon,
     required String label,
+    required String description,
     required Widget page,
   }) {
     return GestureDetector(
@@ -372,7 +406,7 @@ class _HomePageState extends State<HomePage> {
         Navigator.push(context, MaterialPageRoute(builder: (_) => page));
       },
       child: Container(
-        padding: const EdgeInsets.symmetric(vertical: 24),
+        padding: const EdgeInsets.symmetric(vertical: 20),
         decoration: BoxDecoration(
           color: AppColors.lightBrown,
           borderRadius: BorderRadius.circular(16),
@@ -391,100 +425,101 @@ class _HomePageState extends State<HomePage> {
                 fontWeight: FontWeight.w600,
               ),
             ),
+            const SizedBox(height: 4),
+            Text(
+              description,
+              textAlign: TextAlign.center,
+              style: GoogleFonts.urbanist(
+                fontSize: 11,
+                color: AppColors.lightGrey,
+                fontWeight: FontWeight.w400,
+              ),
+            ),
           ],
         ),
       ),
     );
   }
 
-  Widget _buildSafeSpaceAICard(BuildContext context) {
+  /// ACCESSIBLE ACTION: Chat with AI Companion (Subtle)
+  ///
+  /// SafeSpace.AI is accessible here for users who want it, but with
+  /// reduced visual prominence compared to the primary actions.
+  /// This prevents duplication anxiety between this card and the
+  /// bottom navigation's Chat tab.
+  ///
+  /// Design choice: Compact card design with lighter styling
+  Widget _buildSubtleChatOption(BuildContext context) {
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.all(24),
+      padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: AppColors.lightBrown,
-        borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: AppColors.mediumBrown, width: 1.5),
+        color: AppColors.lightBrown.withOpacity(0.7),
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(
+          color: AppColors.mediumBrown.withOpacity(0.5),
+          width: 1,
+        ),
       ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+      child: Row(
         children: [
-          Row(
-            children: [
-              Container(
-                padding: const EdgeInsets.all(12),
-                decoration: BoxDecoration(
-                  color: AppColors.mediumBrown,
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: Icon(
-                  Icons.smart_toy_outlined,
-                  color: AppColors.green,
-                  size: 32,
-                ),
-              ),
-              const SizedBox(width: 16),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'SafeSpace.AI',
-                      style: GoogleFonts.urbanist(
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                      ),
-                    ),
-                    const SizedBox(height: 4),
-                    Text(
-                      'Your AI companion for mental health\nsupport and personalized guidance',
-                      style: GoogleFonts.urbanist(
-                        fontSize: 13,
-                        color: AppColors.lightGrey,
-                        height: 1.4,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ],
+          Container(
+            padding: const EdgeInsets.all(10),
+            decoration: BoxDecoration(
+              color: AppColors.mediumBrown.withOpacity(0.6),
+              borderRadius: BorderRadius.circular(10),
+            ),
+            child: Icon(
+              Icons.smart_toy_outlined,
+              color: AppColors.green.withOpacity(0.8),
+              size: 24,
+            ),
           ),
-          const SizedBox(height: 16),
-          SizedBox(
-            width: double.infinity,
-            child: Material(
-              color: AppColors.mediumBrown,
-              borderRadius: BorderRadius.circular(12),
-              child: InkWell(
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (_) => const ChatBotPage()),
-                  );
-                },
-                borderRadius: BorderRadius.circular(12),
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 14),
-                  child: Center(
-                    child: Text(
-                      'Chat with AI',
-                      style: GoogleFonts.urbanist(
-                        fontSize: 14,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                      ),
-                    ),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'Need a conversation?',
+                  style: GoogleFonts.urbanist(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w600,
+                    color: Colors.white,
                   ),
                 ),
-              ),
+                const SizedBox(height: 2),
+                Text(
+                  'Chat with SafeSpace.AI anytime',
+                  style: GoogleFonts.urbanist(
+                    fontSize: 12,
+                    color: AppColors.lightGrey,
+                    fontWeight: FontWeight.w400,
+                  ),
+                ),
+              ],
             ),
+          ),
+          const SizedBox(width: 12),
+          Icon(
+            Icons.arrow_forward_ios,
+            color: AppColors.green.withOpacity(0.8),
+            size: 16,
           ),
         ],
       ),
-    );
+    ).userTap(() {
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (_) => const ChatBotPage()),
+      );
+    });
   }
 
+  /// Relax & Reset FAB for immediate emotional relief
+  ///
+  /// Always available, prominent, and easily accessible.
+  /// Serves users who need immediate calming tools.
   Widget _buildRelaxResetFAB(BuildContext context) {
     return Container(
       margin: const EdgeInsets.only(bottom: 20),
@@ -507,6 +542,88 @@ class _HomePageState extends State<HomePage> {
         ),
         icon: Icon(Icons.spa_outlined, color: AppColors.brown, size: 22),
       ),
+    );
+  }
+}
+
+/// Extension to make widgets tappable
+extension TapableWidget on Widget {
+  Widget userTap(VoidCallback onTap) {
+    return GestureDetector(onTap: onTap, child: this);
+  }
+}
+
+/// Small internal widget that renders mood choices and handles selection
+class _MoodSelector extends StatefulWidget {
+  @override
+  State<_MoodSelector> createState() => _MoodSelectorState();
+}
+
+class _MoodSelectorState extends State<_MoodSelector> {
+  String? _selected;
+
+  void _select(String mood) {
+    setState(() => _selected = mood);
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text('Mood saved: $mood'),
+        behavior: SnackBarBehavior.floating,
+        backgroundColor: AppColors.mediumBrown,
+      ),
+    );
+  }
+
+  Widget _moodButton(String mood, IconData icon) {
+    final isSelected = _selected == mood;
+    return Expanded(
+      child: GestureDetector(
+        onTap: () => _select(mood),
+        child: Column(
+          children: [
+            Container(
+              padding: const EdgeInsets.all(12),
+              decoration: BoxDecoration(
+                color: isSelected
+                    ? AppColors.mediumBrown
+                    : Colors.white.withOpacity(0.04),
+                borderRadius: BorderRadius.circular(12),
+                border: Border.all(
+                  color: isSelected ? AppColors.green : Colors.transparent,
+                  width: isSelected ? 2 : 0,
+                ),
+              ),
+              child: Icon(
+                icon,
+                color: isSelected ? AppColors.green : Colors.white,
+                size: 28,
+              ),
+            ),
+            const SizedBox(height: 8),
+            Text(
+              mood,
+              style: GoogleFonts.urbanist(
+                fontSize: 12,
+                color: isSelected ? Colors.white : AppColors.lightGrey,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        _moodButton('Great', Icons.sentiment_very_satisfied),
+        const SizedBox(width: 10),
+        _moodButton('Good', Icons.sentiment_satisfied),
+        const SizedBox(width: 10),
+        _moodButton('Okay', Icons.sentiment_neutral),
+        const SizedBox(width: 10),
+        _moodButton('Low', Icons.sentiment_dissatisfied),
+      ],
     );
   }
 }

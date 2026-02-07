@@ -35,7 +35,7 @@ class _AssessmentPageState extends State<AssessmentPage> {
   Widget build(BuildContext context) {
     if (_assessmentState.currentQuestion == null) {
       return const Scaffold(
-        backgroundColor: Color(0xFF211402),
+        backgroundColor: AppColors.brown,
         body: Center(child: Text('Assessment not available')),
       );
     }

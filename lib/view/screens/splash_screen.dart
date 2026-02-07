@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:safe_space/controller/auth_gate.dart';
 import 'package:safe_space/model/colors.dart';
 import 'package:safe_space/view/widgets/cLogo.dart';
@@ -36,7 +37,20 @@ class _SplashScreenState extends State<SplashScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.brown,
-      body: Center(child: cLogo(fontSize: 60)),
+      body: Stack(
+        children: [
+          Positioned.fill(
+            child: Opacity(
+              opacity: 1,
+              child: SvgPicture.asset(
+                'assets/wave_background.svg',
+                fit: BoxFit.cover,
+              ),
+            ),
+          ),
+          Center(child: cLogo(fontSize: 60)),
+        ],
+      ),
     );
   }
 }

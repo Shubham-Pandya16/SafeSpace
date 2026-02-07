@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../../model/colors.dart';
+
 class cMaterialButton extends StatelessWidget {
   final String text;
   final VoidCallback onPressed;
@@ -16,7 +18,7 @@ class cMaterialButton extends StatelessWidget {
       onPressed: onPressed,
       minWidth: double.infinity,
       height: 65,
-      color: const Color(0xFF926247),
+      color: AppColors.accentTeal,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
       child: Text(
         text,

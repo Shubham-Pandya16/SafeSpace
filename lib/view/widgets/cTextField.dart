@@ -75,7 +75,7 @@ class _GlowingTextFieldState extends State<GlowingTextField> {
 
         prefixIcon: Icon(widget.icon, color: Colors.white70, size: 20),
         filled: true,
-        fillColor: const Color(0xFF2A1A10).withOpacity(0.85),
+        fillColor: AppColors.mediumBrown.withOpacity(0.7),
 
         contentPadding: const EdgeInsets.symmetric(
           vertical: 24,

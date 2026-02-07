@@ -161,7 +161,7 @@ class _GroupchatPageState extends State<GroupchatPage> {
                     onPressed: () {
                       _sendMessage();
                     },
-                    color: const Color(0xFF926247),
+                    color: AppColors.accentTeal,
                     height: 65,
                     shape: CircleBorder(),
                     child: Icon(Icons.send),

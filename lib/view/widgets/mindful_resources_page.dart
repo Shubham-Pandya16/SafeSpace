@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:safe_space/model/colors.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-import '../widgets/cText.dart';
+import 'cText.dart';
 
 class VideoResource {
   final String id;

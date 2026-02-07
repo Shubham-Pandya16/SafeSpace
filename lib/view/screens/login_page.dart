@@ -29,7 +29,7 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xFF211402),
+      backgroundColor: AppColors.brown,
       body: Center(
         child: ListView(
           children: [

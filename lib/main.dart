@@ -14,14 +14,12 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: MaterialApp(
-        debugShowCheckedModeBanner: false,
-        theme: ThemeData(
-          textTheme: GoogleFonts.urbanistTextTheme(Typography.englishLike2021),
-        ),
-        home: SplashScreen(),
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      theme: ThemeData(
+        textTheme: GoogleFonts.urbanistTextTheme(Typography.englishLike2021),
       ),
+      home: SplashScreen(),
     );
   }
 }

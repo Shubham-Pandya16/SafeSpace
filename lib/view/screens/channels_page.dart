@@ -32,26 +32,41 @@ class _ChannelsPageState extends State<ChannelsPage> {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.vertical(bottom: Radius.circular(25)),
         ),
-        backgroundColor: AppColors.mediumBrown,
+        // keep AppBar layout as-is but change color to primary calm blue
+        backgroundColor: AppColors.brown,
       ),
       body: Column(
         children: [
-          // Container(
-          //   width: double.infinity,
-          //   padding: const EdgeInsets.all(12),
-          //   color: Colors.blue.shade50,
-          //   child: const Text(
-          //     "This is a peer support space. Be kind. No professional advice here.",
-          //     style: TextStyle(fontSize: 13),
-          //   ),
-          // ),
+          // Small informational header
+          Padding(
+            padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
+            child: Container(
+              width: double.infinity,
+              padding: const EdgeInsets.all(14),
+              decoration: BoxDecoration(
+                color: AppColors.lightestBrowm.withOpacity(0.14),
+                borderRadius: BorderRadius.circular(14),
+                border: Border.all(color: AppColors.mediumBrown.withOpacity(0.12)),
+              ),
+              child: Row(
+                children: [
+                  Icon(Icons.info_outline, color: AppColors.lightGrey, size: 20),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: Text(
+                      'This is a peer support space — be kind and respectful. Not professional advice.',
+                      style: TextStyle(color: AppColors.lightGrey, fontSize: 13),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
 
-          // Group list
+          // Group list (keeps Firestore stream and navigation intact)
           Expanded(
             child: StreamBuilder<QuerySnapshot>(
-              stream: FirebaseFirestore.instance
-                  .collection('community')
-                  .snapshots(),
+              stream: FirebaseFirestore.instance.collection('community').snapshots(),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return const Center(child: CircularProgressIndicator());
@@ -66,6 +81,7 @@ class _ChannelsPageState extends State<ChannelsPage> {
                 final groups = snapshot.data!.docs;
 
                 return ListView.builder(
+                  padding: const EdgeInsets.symmetric(vertical: 8),
                   itemCount: groups.length,
                   itemBuilder: (context, index) {
                     final group = groups[index];
@@ -82,58 +98,69 @@ class _ChannelsPageState extends State<ChannelsPage> {
                           ),
                         );
                       },
-                      child: Card(
-                        color: AppColors.lightestBrowm,
-                        margin: const EdgeInsets.only(
-                          left: 12,
-                          right: 12,
-                          top: 12,
+                      child: Container(
+                        margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                        decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                            begin: Alignment.topLeft,
+                            end: Alignment.bottomRight,
+                            colors: [AppColors.lightBrown.withOpacity(0.16), AppColors.lightestBrowm.withOpacity(0.08)],
+                          ),
+                          borderRadius: BorderRadius.circular(14),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withOpacity(0.06),
+                              blurRadius: 10,
+                              offset: const Offset(0, 6),
+                            ),
+                          ],
                         ),
-                        child: Container(
-                          height: 100,
+                        child: Padding(
+                          padding: const EdgeInsets.all(12),
                           child: Row(
-                            crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
-                              SizedBox(width: 20),
                               CircleAvatar(
-                                backgroundColor: AppColors.brown,
-                                radius: 35,
+                                radius: 32,
+                                backgroundColor: AppColors.lightestBrowm,
                                 child: CircleAvatar(
-                                  backgroundColor: AppColors.lightestBrowm,
-                                  radius: 32,
-                                  // child: CircleAvatar(
-                                  //   backgroundColor: AppColors.lightestBrowm,
-                                  //   radius: 25,
+                                  radius: 28,
+                                  backgroundColor: AppColors.mediumBrown,
                                   child: Icon(
-                                    CommunityIcons.icons[group.id] ??
-                                        Icons.group_outlined,
-                                    size: 25,
-                                    color: AppColors.brown,
-                                  ),
-                                ),
-                                // ),
-                              ),
-                              SizedBox(width: 20),
-
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  cText(
-                                    fontSize: 18,
-                                    text: group['name'],
+                                    CommunityIcons.icons[group.id] ?? Icons.group_outlined,
+                                    size: 26,
                                     color: Colors.white,
                                   ),
-                                  Text(
-                                    group['description'],
-                                    style: TextStyle(
-                                      fontSize: 14,
-                                      color: AppColors.lightGrey,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                ],
+                                ),
                               ),
+                              const SizedBox(width: 16),
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text(
+                                      group['name'],
+                                      style: TextStyle(
+                                        fontSize: 17,
+                                        fontWeight: FontWeight.w700,
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                    const SizedBox(height: 6),
+                                    Text(
+                                      group['description'],
+                                      maxLines: 2,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: TextStyle(
+                                        fontSize: 13,
+                                        color: AppColors.lightGrey,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              const SizedBox(width: 8),
+                              Icon(Icons.chevron_right, color: AppColors.lightGrey),
                             ],
                           ),
                         ),
