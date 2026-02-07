@@ -42,8 +42,9 @@ class _SignupPageState extends State<SignupPage> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                  SizedBox(height: 50),
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Text("Sign Up to ", style: TextStyle(fontSize: 25)),
                       cLogo(fontSize: 35),
@@ -112,7 +113,6 @@ class _SignupPageState extends State<SignupPage> {
                       }
 
                       authController.signUp(
-                        context,
                         email: emailController.text,
                         password: passwordController.text,
                       );

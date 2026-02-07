@@ -65,6 +65,21 @@ class _GroupchatPageState extends State<GroupchatPage> {
     });
   }
 
+  Widget _buildChatBackground() {
+    return Positioned.fill(
+      child: Container(
+        decoration: BoxDecoration(
+          color: AppColors.brown, // base color
+          image: DecorationImage(
+            image: AssetImage('assets/chat_doodle.png'),
+            repeat: ImageRepeat.repeat,
+            // opacity: 1, // VERY important
+          ),
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     // var sWidth = MediaQuery.of(context).size.width;
@@ -88,90 +103,96 @@ class _GroupchatPageState extends State<GroupchatPage> {
         backgroundColor: AppColors.mediumBrown,
       ),
 
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      body: Stack(
         children: [
-          // Messages list
-          Expanded(
-            child: StreamBuilder<QuerySnapshot>(
-              stream: FirebaseFirestore.instance
-                  .collection('community')
-                  .doc(widget.groupId)
-                  .collection('messages')
-                  .orderBy('timestamp', descending: true)
-                  .snapshots(),
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const Center(child: CircularProgressIndicator());
-                }
+          _buildChatBackground(),
+          Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              // Messages list
+              Expanded(
+                child: StreamBuilder<QuerySnapshot>(
+                  stream: FirebaseFirestore.instance
+                      .collection('community')
+                      .doc(widget.groupId)
+                      .collection('messages')
+                      .orderBy('timestamp', descending: true)
+                      .snapshots(),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return const Center(child: CircularProgressIndicator());
+                    }
 
-                if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
-                  return const Center(child: Text("No messages yet"));
-                }
+                    if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
+                      return const Center(child: Text("No messages yet"));
+                    }
 
-                final messages = snapshot.data!.docs;
-                WidgetsBinding.instance.addPostFrameCallback((_) {
-                  if (_scrollController.hasClients) {
-                    _scrollController.jumpTo(0);
-                  }
-                });
+                    final messages = snapshot.data!.docs;
+                    WidgetsBinding.instance.addPostFrameCallback((_) {
+                      if (_scrollController.hasClients) {
+                        _scrollController.jumpTo(0);
+                      }
+                    });
 
-                return ListView.builder(
-                  reverse: true,
-                  controller: _scrollController,
-                  padding: const EdgeInsets.all(8),
-                  itemCount: messages.length,
-                  itemBuilder: (context, index) {
-                    final data = messages[index].data() as Map<String, dynamic>;
+                    return ListView.builder(
+                      reverse: true,
+                      controller: _scrollController,
+                      padding: const EdgeInsets.all(8),
+                      itemCount: messages.length,
+                      itemBuilder: (context, index) {
+                        final data =
+                            messages[index].data() as Map<String, dynamic>;
 
-                    return Messages(
-                      message: data['text'] ?? '',
-                      isUser: _isUser(data['senderID']),
-                      date: data['timestamp'] != null
-                          ? DateFormat(
-                              'hh:mm aa • dd MMM',
-                            ).format((data['timestamp'] as Timestamp).toDate())
-                          : null,
+                        return Messages(
+                          message: data['text'] ?? '',
+                          isUser: _isUser(data['senderID']),
+                          date: data['timestamp'] != null
+                              ? DateFormat('hh:mm aa • dd MMM').format(
+                                  (data['timestamp'] as Timestamp).toDate(),
+                                )
+                              : null,
+                        );
+                      },
                     );
                   },
-                );
-              },
-            ),
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.end,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              SizedBox(width: 8),
-              Expanded(
-                flex: 5,
-                child: GlowingTextField(
-                  borderColor: AppColors.lightBrown,
-                  hint: "Type to start chatting.. ",
-                  icon: Icons.edit,
-                  textController: _userInput,
                 ),
               ),
-              SizedBox(width: 6),
-
-              Expanded(
-                flex: 1,
-                child: SizedBox(
-                  child: MaterialButton(
-                    onPressed: () {
-                      _sendMessage();
-                    },
-                    color: AppColors.accentTeal,
-                    height: 65,
-                    shape: CircleBorder(),
-                    child: Icon(Icons.send),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  SizedBox(width: 8),
+                  Expanded(
+                    flex: 5,
+                    child: GlowingTextField(
+                      borderColor: AppColors.lightBrown,
+                      hint: "Type to start chatting.. ",
+                      icon: Icons.edit,
+                      textController: _userInput,
+                    ),
                   ),
-                ),
+                  SizedBox(width: 6),
+
+                  Expanded(
+                    flex: 1,
+                    child: SizedBox(
+                      child: MaterialButton(
+                        onPressed: () {
+                          _sendMessage();
+                        },
+                        color: AppColors.accentTeal,
+                        height: 65,
+                        shape: CircleBorder(),
+                        child: Icon(Icons.send),
+                      ),
+                    ),
+                  ),
+                  SizedBox(width: 8),
+                ],
               ),
-              SizedBox(width: 8),
+              SizedBox(height: 15),
             ],
           ),
-          SizedBox(height: 15),
         ],
       ),
     );

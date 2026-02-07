@@ -65,7 +65,8 @@ class _GlowingTextFieldState extends State<GlowingTextField> {
       keyboardType: TextInputType.emailAddress,
       obscureText: widget.isPassword,
       style: const TextStyle(color: Colors.white, fontSize: 16),
-
+      maxLines: null,
+      minLines: 1,
       decoration: InputDecoration(
         hintText: widget.hint,
         hintStyle: TextStyle(
@@ -73,12 +74,12 @@ class _GlowingTextFieldState extends State<GlowingTextField> {
           fontWeight: FontWeight.bold,
         ),
 
-        prefixIcon: Icon(widget.icon, color: Colors.white70, size: 20),
+        prefixIcon: Icon(widget.icon, color: Colors.white70, size: 18),
         filled: true,
         fillColor: AppColors.mediumBrown.withOpacity(0.7),
 
         contentPadding: const EdgeInsets.symmetric(
-          vertical: 24,
+          vertical: 20,
           horizontal: 20,
         ),
 

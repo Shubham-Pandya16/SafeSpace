@@ -22,6 +22,20 @@ class _ChatBotPageState extends State<ChatBotPage> {
 
   final List<Message> _messages = [];
   bool _isThinking = false;
+  Widget _buildChatBackground() {
+    return Positioned.fill(
+      child: Container(
+        decoration: BoxDecoration(
+          color: AppColors.brown, // base color
+          image: DecorationImage(
+            image: AssetImage('assets/chat_doodle.png'),
+            repeat: ImageRepeat.repeat,
+            opacity: 0.7, // VERY important
+          ),
+        ),
+      ),
+    );
+  }
 
   void _scrollToBottom() {
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -104,14 +118,14 @@ $userInputMessage
       backgroundColor: AppColors.brown,
 
       appBar: AppBar(
-        leading: GestureDetector(
-          onTap: () => Navigator.pop(context),
-          child: const Icon(
-            Icons.arrow_back_ios_new,
-            size: 20,
-            color: Colors.grey,
-          ),
-        ),
+        // leading: GestureDetector(
+        //   onTap: () => Navigator.pop(context),
+        //   child: const Icon(
+        //     Icons.arrow_back_ios_new,
+        //     size: 20,
+        //     color: Colors.grey,
+        //   ),
+        // ),
         toolbarHeight: 75,
         title: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -130,56 +144,61 @@ $userInputMessage
         backgroundColor: AppColors.mediumBrown,
       ),
 
-      body: Column(
+      body: Stack(
         children: [
-          Expanded(
-            child: ListView.builder(
-              reverse: true,
-              controller: _scrollController,
-              padding: const EdgeInsets.all(12),
-              itemCount: _messages.length + (_isThinking ? 1 : 0),
-              itemBuilder: (context, i) {
-                if (_isThinking && i == 0) {
-                  return const Messages(isUser: false, message: "Typing…");
-                }
+          _buildChatBackground(),
+          Column(
+            children: [
+              Expanded(
+                child: ListView.builder(
+                  reverse: true,
+                  controller: _scrollController,
+                  padding: const EdgeInsets.all(12),
+                  itemCount: _messages.length + (_isThinking ? 1 : 0),
+                  itemBuilder: (context, i) {
+                    if (_isThinking && i == 0) {
+                      return const Messages(isUser: false, message: "Typing…");
+                    }
 
-                final index =
-                    _messages.length - 1 - (i - (_isThinking ? 1 : 0));
-                final message = _messages[index];
+                    final index =
+                        _messages.length - 1 - (i - (_isThinking ? 1 : 0));
+                    final message = _messages[index];
 
-                return Messages(
-                  isUser: message.isUser,
-                  message: message.message,
-                );
-              },
-            ),
-          ),
-
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
-            child: Row(
-              children: [
-                Expanded(
-                  child: GlowingTextField(
-                    borderColor: AppColors.lightBrown,
-                    hint: "How are you feeling today?",
-                    icon: Icons.edit,
-                    textController: _userInput,
-                  ),
+                    return Messages(
+                      isUser: message.isUser,
+                      message: message.message,
+                    );
+                  },
                 ),
-                const SizedBox(width: 6),
-                MaterialButton(
-                  onPressed: _isThinking ? null : geminiResponseCall,
-                  color: AppColors.accentTeal,
-                  shape: const CircleBorder(),
-                  padding: const EdgeInsets.all(14),
-                  child: const Icon(Icons.send),
-                ),
-              ],
-            ),
-          ),
+              ),
 
-          const SizedBox(height: 10),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: GlowingTextField(
+                        borderColor: AppColors.lightBrown,
+                        hint: "How are you feeling today?",
+                        icon: Icons.edit,
+                        textController: _userInput,
+                      ),
+                    ),
+                    const SizedBox(width: 0),
+                    MaterialButton(
+                      onPressed: _isThinking ? null : geminiResponseCall,
+                      color: AppColors.accentTeal,
+                      shape: const CircleBorder(),
+                      padding: const EdgeInsets.all(14),
+                      child: const Icon(Icons.send),
+                    ),
+                  ],
+                ),
+              ),
+
+              const SizedBox(height: 10),
+            ],
+          ),
         ],
       ),
     );

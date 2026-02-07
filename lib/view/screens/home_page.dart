@@ -8,16 +8,8 @@ import 'package:safe_space/view/screens/relax_and_reset_page.dart';
 import 'package:safe_space/view/widgets/cLogo.dart';
 import 'package:safe_space/view/widgets/mindful_resources_page.dart';
 
-/// HomePage is designed for emotion-driven navigation.
-///
-/// Design Philosophy:
-/// Users in different emotional states see intentional guidance:
-/// - PRIMARY: Self-Assessment (clear, supportive entry point)
-/// - SECONDARY: Community + Resources (two gentle options)
-/// - AVAILABLE: Relax & Reset (immediate relief)
-/// - ACCESSIBLE: Chat via bottom navigation (for goal-driven users)
-///
-/// This structure reduces decision fatigue and suits users who feel unsure.
+import '../../controller/auth_services.dart';
+
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
 
@@ -36,6 +28,8 @@ class _HomePageState extends State<HomePage> {
       return 'Good Evening!';
     }
   }
+
+  final AuthController _authController = AuthController();
 
   @override
   Widget build(BuildContext context) {
@@ -63,19 +57,16 @@ class _HomePageState extends State<HomePage> {
                     _buildDailyQuoteCard(),
                     const SizedBox(height: 28),
 
-                    // PRIMARY ACTION: Self Assessment
                     _buildHeadingText('What you need right now'),
                     const SizedBox(height: 12),
                     _buildSelfAssessmentCard(context),
                     const SizedBox(height: 28),
 
-                    // SECONDARY ACTIONS: Community & Resources
                     _buildHeadingText('Find support'),
                     const SizedBox(height: 12),
                     _buildTwoActionCards(context),
                     const SizedBox(height: 28),
 
-                    // ACCESSIBLE ACTIONS: Additional options
                     _buildHeadingText('Other resources'),
                     const SizedBox(height: 12),
                     _buildSubtleChatOption(context),
@@ -95,9 +86,14 @@ class _HomePageState extends State<HomePage> {
   AppBar _buildAppBar() {
     return AppBar(
       centerTitle: true,
-      title: Padding(
-        padding: const EdgeInsets.only(bottom: 15.0),
-        child: cLogo(fontSize: 32),
+      title: GestureDetector(
+        onLongPress: () {
+          _authController.signOut(context);
+        },
+        child: Padding(
+          padding: const EdgeInsets.only(bottom: 15.0),
+          child: cLogo(fontSize: 32),
+        ),
       ),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(bottom: Radius.circular(25)),
@@ -106,7 +102,6 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  /// Emotional greeting that validates the user's state
   Widget _buildGreetingSection() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -131,7 +126,6 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  /// Soft section heading for navigation hierarchy
   Widget _buildHeadingText(String text) {
     return Text(
       text,
@@ -144,7 +138,6 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  /// Mood tracking card: lightweight, non-intrusive, supportive
   Widget _buildMoodCard() {
     return Container(
       width: double.infinity,
@@ -184,7 +177,6 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  /// Daily inspirational quote for emotional grounding
   Widget _buildDailyQuoteCard() {
     final quotes = [
       '"There is hope, even when your brain tells you there isn\'t."',
@@ -259,10 +251,6 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  /// PRIMARY ACTION: Self-Assessment Questionnaire
-  ///
-  /// Positioned first in the supporting actions to encourage self-reflection
-  /// as the primary entry point for users unsure of their state.
   Widget _buildSelfAssessmentCard(BuildContext context) {
     return Container(
       width: double.infinity,
@@ -362,11 +350,6 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  /// SECONDARY ACTIONS: Community & Resources
-  ///
-  /// Two equal-weight options for users seeking support:
-  /// - Community: Human connection and peer support
-  /// - Resources: Self-guided learning and coping tools
   Widget _buildTwoActionCards(BuildContext context) {
     return Row(
       children: [
@@ -393,7 +376,6 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  /// Individual action card with icon and label
   Widget _buildActionCard(
     BuildContext context, {
     required IconData icon,
@@ -441,14 +423,6 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  /// ACCESSIBLE ACTION: Chat with AI Companion (Subtle)
-  ///
-  /// SafeSpace.AI is accessible here for users who want it, but with
-  /// reduced visual prominence compared to the primary actions.
-  /// This prevents duplication anxiety between this card and the
-  /// bottom navigation's Chat tab.
-  ///
-  /// Design choice: Compact card design with lighter styling
   Widget _buildSubtleChatOption(BuildContext context) {
     return Container(
       width: double.infinity,
@@ -516,10 +490,6 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
-  /// Relax & Reset FAB for immediate emotional relief
-  ///
-  /// Always available, prominent, and easily accessible.
-  /// Serves users who need immediate calming tools.
   Widget _buildRelaxResetFAB(BuildContext context) {
     return Container(
       margin: const EdgeInsets.only(bottom: 20),
@@ -546,14 +516,12 @@ class _HomePageState extends State<HomePage> {
   }
 }
 
-/// Extension to make widgets tappable
 extension TapableWidget on Widget {
   Widget userTap(VoidCallback onTap) {
     return GestureDetector(onTap: onTap, child: this);
   }
 }
 
-/// Small internal widget that renders mood choices and handles selection
 class _MoodSelector extends StatefulWidget {
   @override
   State<_MoodSelector> createState() => _MoodSelectorState();

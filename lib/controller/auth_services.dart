@@ -5,30 +5,18 @@ import 'package:flutter/material.dart';
 class AuthController {
   final FirebaseAuth _authService = FirebaseAuth.instance;
 
-  Future<void> signIn(
-    BuildContext context, {
-    required String email,
-    required String password,
-  }) async {
+  Future<void> signIn({required String email, required String password}) async {
     try {
       await _authService.signInWithEmailAndPassword(
         email: email.trim(),
         password: password.trim(),
       );
-
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(const SnackBar(content: Text("Login successful")));
     } on FirebaseAuthException catch (e) {
-      _showError(context, e.code);
+      throw e;
     }
   }
 
-  Future<void> signUp(
-    BuildContext context, {
-    required String email,
-    required String password,
-  }) async {
+  Future<void> signUp({required String email, required String password}) async {
     try {
       UserCredential userCredential = await _authService
           .createUserWithEmailAndPassword(
@@ -38,22 +26,15 @@ class AuthController {
 
       final uid = userCredential.user!.uid;
 
-      // Store user in Firestore
       await FirebaseFirestore.instance.collection("users").doc(uid).set({
         "uid": uid,
         "email": email.trim(),
         "createdAt": FieldValue.serverTimestamp(),
       });
-
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("Account created successfully")),
-      );
     } on FirebaseAuthException catch (e) {
-      _showError(context, e.code);
+      throw e;
     } catch (e) {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(const SnackBar(content: Text("Something went wrong")));
+      throw Exception("Something went wrong");
     }
   }
 
@@ -63,7 +44,6 @@ class AuthController {
     ScaffoldMessenger.of(
       context,
     ).showSnackBar(const SnackBar(content: Text("Logged out")));
-    // AuthGate will redirect automatically
   }
 
   void _showError(BuildContext context, String code) {

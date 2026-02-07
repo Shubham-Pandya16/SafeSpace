@@ -19,10 +19,11 @@ class _ChannelsPageState extends State<ChannelsPage> {
     return Scaffold(
       backgroundColor: AppColors.brown,
       appBar: AppBar(
-        leading: GestureDetector(
-          onTap: () => Navigator.pop(context),
-          child: Icon(Icons.arrow_back_ios_new, size: 20, color: Colors.grey),
-        ),
+        leading: Container(),
+        // leading: GestureDetector(
+        //   onTap: () => Navigator.pop(context),
+        //   child: Icon(Icons.arrow_back_ios_new, size: 20, color: Colors.grey),
+        // ),
         toolbarHeight: 75,
         title: Column(
           mainAxisAlignment: MainAxisAlignment.start,
@@ -46,16 +47,25 @@ class _ChannelsPageState extends State<ChannelsPage> {
               decoration: BoxDecoration(
                 color: AppColors.lightestBrowm.withOpacity(0.14),
                 borderRadius: BorderRadius.circular(14),
-                border: Border.all(color: AppColors.mediumBrown.withOpacity(0.12)),
+                border: Border.all(
+                  color: AppColors.mediumBrown.withOpacity(0.12),
+                ),
               ),
               child: Row(
                 children: [
-                  Icon(Icons.info_outline, color: AppColors.lightGrey, size: 20),
+                  Icon(
+                    Icons.info_outline,
+                    color: AppColors.lightGrey,
+                    size: 20,
+                  ),
                   const SizedBox(width: 12),
                   Expanded(
                     child: Text(
                       'This is a peer support space — be kind and respectful. Not professional advice.',
-                      style: TextStyle(color: AppColors.lightGrey, fontSize: 13),
+                      style: TextStyle(
+                        color: AppColors.lightGrey,
+                        fontSize: 13,
+                      ),
                     ),
                   ),
                 ],
@@ -66,7 +76,9 @@ class _ChannelsPageState extends State<ChannelsPage> {
           // Group list (keeps Firestore stream and navigation intact)
           Expanded(
             child: StreamBuilder<QuerySnapshot>(
-              stream: FirebaseFirestore.instance.collection('community').snapshots(),
+              stream: FirebaseFirestore.instance
+                  .collection('community')
+                  .snapshots(),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return const Center(child: CircularProgressIndicator());
@@ -99,12 +111,18 @@ class _ChannelsPageState extends State<ChannelsPage> {
                         );
                       },
                       child: Container(
-                        margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                        margin: const EdgeInsets.symmetric(
+                          horizontal: 16,
+                          vertical: 8,
+                        ),
                         decoration: BoxDecoration(
                           gradient: LinearGradient(
                             begin: Alignment.topLeft,
                             end: Alignment.bottomRight,
-                            colors: [AppColors.lightBrown.withOpacity(0.16), AppColors.lightestBrowm.withOpacity(0.08)],
+                            colors: [
+                              AppColors.lightBrown.withOpacity(0.16),
+                              AppColors.lightestBrowm.withOpacity(0.08),
+                            ],
                           ),
                           borderRadius: BorderRadius.circular(14),
                           boxShadow: [
@@ -126,7 +144,8 @@ class _ChannelsPageState extends State<ChannelsPage> {
                                   radius: 28,
                                   backgroundColor: AppColors.mediumBrown,
                                   child: Icon(
-                                    CommunityIcons.icons[group.id] ?? Icons.group_outlined,
+                                    CommunityIcons.icons[group.id] ??
+                                        Icons.group_outlined,
                                     size: 26,
                                     color: Colors.white,
                                   ),
@@ -160,7 +179,10 @@ class _ChannelsPageState extends State<ChannelsPage> {
                                 ),
                               ),
                               const SizedBox(width: 8),
-                              Icon(Icons.chevron_right, color: AppColors.lightGrey),
+                              Icon(
+                                Icons.chevron_right,
+                                color: AppColors.lightGrey,
+                              ),
                             ],
                           ),
                         ),

@@ -75,7 +75,6 @@ class _LoginPageState extends State<LoginPage> {
                   cMaterialButton(
                     onPressed: () {
                       _authController.signIn(
-                        context,
                         email: emailController.text,
                         password: passwordController.text,
                       );
