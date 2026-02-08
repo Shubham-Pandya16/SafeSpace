@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:safe_space/model/colors.dart';
-import 'package:safe_space/view/screens/home_page.dart';
 
 class AssessmentResultPage extends StatefulWidget {
   final int score;
@@ -83,7 +82,7 @@ class _AssessmentResultPageState extends State<AssessmentResultPage> {
                     fontSize: 28,
                     fontWeight: FontWeight.bold,
                     color: Colors.white,
-                    letterSpacing: -0.5,
+                    letterSpacing: -0.2,
                   ),
                 ),
 
@@ -135,7 +134,6 @@ class _AssessmentResultPageState extends State<AssessmentResultPage> {
   }
 
   Widget _buildScoreCard(BuildContext context) {
-    // Map score into a segment index (0..4) without showing the numeric value
     final int segmentIndex;
     final int s = widget.score;
     if (s <= 20) {
@@ -384,10 +382,7 @@ class _AssessmentResultPageState extends State<AssessmentResultPage> {
       height: 56,
       child: MaterialButton(
         onPressed: () {
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(builder: (_) => HomePage()),
-          );
+          Navigator.pop(context);
         },
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(28)),
         color: AppColors.lightestBrowm,

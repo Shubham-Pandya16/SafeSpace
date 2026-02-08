@@ -168,6 +168,7 @@ class _GroupchatPageState extends State<GroupchatPage> {
                       borderColor: AppColors.lightBrown,
                       hint: "Type to start chatting.. ",
                       icon: Icons.edit,
+                      isChatBot: true,
                       textController: _userInput,
                     ),
                   ),

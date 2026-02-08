@@ -72,7 +72,10 @@ $userInputMessage
     _scrollToBottom();
 
     try {
-      final model = GenerativeModel(model: 'gemini-2.5-flash', apiKey: apikey);
+      final model = GenerativeModel(
+        model: 'gemini-2.5-flash',
+        apiKey: await fetchApiKeyFromFirestore(),
+      );
 
       final content = Content.text(finalPrompt);
       final response = await model.generateContent([content]);
@@ -181,6 +184,7 @@ $userInputMessage
                       child: GlowingTextField(
                         borderColor: AppColors.lightBrown,
                         hint: "How are you feeling today?",
+                        isChatBot: true,
                         icon: Icons.edit,
                         textController: _userInput,
                       ),

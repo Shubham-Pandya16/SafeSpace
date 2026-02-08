@@ -9,6 +9,7 @@ import 'package:safe_space/view/widgets/cLogo.dart';
 import 'package:safe_space/view/widgets/mindful_resources_page.dart';
 
 import '../../controller/auth_services.dart';
+import '../../controller/daily_quote.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -69,7 +70,12 @@ class _HomePageState extends State<HomePage> {
 
                     _buildHeadingText('Other resources'),
                     const SizedBox(height: 12),
+
                     _buildSubtleChatOption(context),
+                    SizedBox(height: 28),
+
+                    _buildDisclaimer(),
+
                     const SizedBox(height: 100),
                   ],
                 ),
@@ -115,7 +121,7 @@ class _HomePageState extends State<HomePage> {
           ),
         ),
         Text(
-          'How are you feeling today?',
+          'What’s on your mind today?',
           style: GoogleFonts.urbanist(
             fontSize: 16,
             color: AppColors.lightGrey,
@@ -153,7 +159,7 @@ class _HomePageState extends State<HomePage> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                'How are you feeling today?',
+                'How are you feeling right now?',
                 style: GoogleFonts.urbanist(
                   fontSize: 16,
                   fontWeight: FontWeight.w600,
@@ -166,7 +172,7 @@ class _HomePageState extends State<HomePage> {
           _MoodSelector(),
           const SizedBox(height: 12),
           Text(
-            'Track your mood to understand yourself better.',
+            'Take a quiet pause to notice how you feel.',
             style: GoogleFonts.urbanist(
               fontSize: 12,
               color: AppColors.lightGrey,
@@ -178,18 +184,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget _buildDailyQuoteCard() {
-    final quotes = [
-      '"There is hope, even when your brain tells you there isn\'t."',
-      '"You don\'t have to see the whole staircase, just take the first step."',
-      '"Progress is not about perfection."',
-      '"You are stronger than you think."',
-      '"This moment is an opportunity to choose peace."',
-      '"Healing is not linear, but it is possible."',
-      '"Your mental health is a priority, not a luxury."',
-    ];
-
     final dayIndex = DateTime.now().weekday - 1;
-    final quote = quotes[dayIndex % quotes.length];
 
     return Container(
       width: double.infinity,
@@ -209,15 +204,24 @@ class _HomePageState extends State<HomePage> {
         children: [
           Expanded(
             child: Center(
-              child: Text(
-                quote,
-                textAlign: TextAlign.center,
-                style: GoogleFonts.urbanist(
-                  fontSize: 22,
-                  fontWeight: FontWeight.w600,
-                  color: Colors.white,
-                  height: 1.6,
-                ),
+              child: FutureBuilder<String>(
+                future: DailyQuoteService.getTodayQuote(),
+                builder: (context, snapshot) {
+                  if (!snapshot.hasData) {
+                    return const SizedBox();
+                  }
+
+                  return Text(
+                    snapshot.data!,
+                    textAlign: TextAlign.center,
+                    style: GoogleFonts.urbanist(
+                      fontSize: 22,
+                      fontWeight: FontWeight.w600,
+                      color: Colors.white,
+                      height: 1.6,
+                    ),
+                  );
+                },
               ),
             ),
           ),
@@ -594,4 +598,50 @@ class _MoodSelectorState extends State<_MoodSelector> {
       ],
     );
   }
+}
+
+Widget _buildDisclaimer() {
+  return Container(
+    padding: const EdgeInsets.all(16),
+    decoration: BoxDecoration(
+      color: AppColors.lightBrown.withOpacity(0.3),
+      borderRadius: BorderRadius.circular(12),
+      border: Border.all(color: AppColors.green.withAlpha(50), width: 1),
+    ),
+    child: Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Icon(
+          Icons.info_outline,
+          color: AppColors.green.withAlpha(80),
+          size: 20,
+        ),
+        const SizedBox(width: 12),
+        Expanded(
+          child: Row(
+            children: [
+              Text(
+                'Long click on the SafeSpace.',
+                style: TextStyle(
+                  color: AppColors.green.withAlpha(80),
+                  fontSize: 13,
+                  fontWeight: FontWeight.bold,
+                  height: 1.4,
+                ),
+              ),
+              Text(
+                ' logo to Sign Out.',
+                style: TextStyle(
+                  color: AppColors.green.withAlpha(80),
+                  fontSize: 13,
+                  fontWeight: FontWeight.bold,
+                  height: 1.4,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
+    ),
+  );
 }

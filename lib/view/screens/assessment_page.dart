@@ -106,7 +106,7 @@ class _AssessmentPageState extends State<AssessmentPage> {
           Text(
             '${state.currentQuestionIndex + 1} of ${state.totalQuestions}',
             style: const TextStyle(
-              color: AppColors.lightestBrowm,
+              color: AppColors.lightGrey,
               fontSize: 14,
               fontWeight: FontWeight.w600,
             ),
@@ -120,9 +120,7 @@ class _AssessmentPageState extends State<AssessmentPage> {
               value: state.progressPercentage,
               minHeight: 8,
               backgroundColor: AppColors.lightBrown,
-              valueColor: const AlwaysStoppedAnimation<Color>(
-                AppColors.lightestBrowm,
-              ),
+              valueColor: const AlwaysStoppedAnimation<Color>(AppColors.green),
             ),
           ),
         ],
@@ -137,23 +135,24 @@ class _AssessmentPageState extends State<AssessmentPage> {
       decoration: BoxDecoration(
         color: AppColors.lightBrown.withOpacity(0.3),
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(
-          color: AppColors.lightestBrowm.withOpacity(0.3),
-          width: 1,
-        ),
+        border: Border.all(color: AppColors.green.withAlpha(50), width: 1),
       ),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Icon(Icons.info_outline, color: AppColors.lightestBrowm, size: 20),
+          Icon(
+            Icons.info_outline,
+            color: AppColors.green.withAlpha(80),
+            size: 20,
+          ),
           const SizedBox(width: 12),
           Expanded(
             child: Text(
               'This is a self-assessment, not a diagnosis.',
               style: TextStyle(
-                color: AppColors.lightestBrowm.withOpacity(0.9),
+                color: AppColors.green.withAlpha(80),
                 fontSize: 13,
-                fontWeight: FontWeight.w500,
+                fontWeight: FontWeight.bold,
                 height: 1.4,
               ),
             ),
@@ -174,7 +173,7 @@ class _AssessmentPageState extends State<AssessmentPage> {
         Text(
           'How are you feeling?',
           style: TextStyle(
-            color: AppColors.lightestBrowm.withOpacity(0.7),
+            color: Colors.white70,
             fontSize: 12,
             fontWeight: FontWeight.w500,
             letterSpacing: 0.5,
@@ -230,10 +229,12 @@ class _AssessmentPageState extends State<AssessmentPage> {
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: isSelected
-            ? AppColors.lightestBrowm.withOpacity(0.2)
+            ? AppColors.accentBlue.withAlpha(51)
             : AppColors.mediumBrown.withOpacity(0.5),
         border: Border.all(
-          color: isSelected ? AppColors.lightestBrowm : AppColors.mediumBrown,
+          color: isSelected
+              ? AppColors.accentBlue.withAlpha(200)
+              : AppColors.mediumBrown,
           width: isSelected ? 2 : 1,
         ),
         borderRadius: BorderRadius.circular(12),
@@ -256,14 +257,16 @@ class _AssessmentPageState extends State<AssessmentPage> {
               shape: BoxShape.circle,
               border: Border.all(
                 color: isSelected
-                    ? AppColors.lightestBrowm
+                    ? AppColors.accentTeal.withAlpha(200)
                     : Colors.white.withOpacity(0.3),
-                width: 2,
+                width: isSelected ? 2 : 1,
               ),
-              color: isSelected ? AppColors.lightestBrowm : Colors.transparent,
+              color: isSelected
+                  ? AppColors.accentBlue.withAlpha(51)
+                  : Colors.transparent,
             ),
             child: isSelected
-                ? const Icon(Icons.check, size: 14, color: AppColors.brown)
+                ? const Icon(Icons.check, size: 14, color: AppColors.accentBlue)
                 : null,
           ),
           const SizedBox(width: 16),
@@ -291,18 +294,18 @@ class _AssessmentPageState extends State<AssessmentPage> {
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: AppColors.mediumBrown,
+        // color: AppColors.mediumBrown,
         borderRadius: const BorderRadius.only(
           topLeft: Radius.circular(16),
           topRight: Radius.circular(16),
         ),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.1),
-            blurRadius: 8,
-            offset: const Offset(0, -2),
-          ),
-        ],
+        // boxShadow: [
+        //   BoxShadow(
+        //     color: Colors.black.withOpacity(0.1),
+        //     blurRadius: 8,
+        //     offset: const Offset(0, -2),
+        //   ),
+        // ],
       ),
       child: Row(
         children: [
@@ -310,7 +313,7 @@ class _AssessmentPageState extends State<AssessmentPage> {
           if (canGoBack)
             Expanded(
               child: _buildSecondaryButton(
-                label: 'Back',
+                // label: ,
                 onPressed: () => state.previousQuestion(),
               ),
             )
@@ -324,7 +327,10 @@ class _AssessmentPageState extends State<AssessmentPage> {
             child: state.isLoading
                 ? _buildLoadingButton()
                 : _buildPrimaryButton(
-                    label: isLastQuestion ? 'Finish Assessment' : 'Next',
+                    label: Icon(
+                      Icons.chevron_right_outlined,
+                      color: AppColors.brown,
+                    ),
                     onPressed: canGoForward
                         ? () async {
                             if (isLastQuestion) {
@@ -343,7 +349,7 @@ class _AssessmentPageState extends State<AssessmentPage> {
 
   /// Build primary button
   Widget _buildPrimaryButton({
-    required String label,
+    required Icon label,
     required VoidCallback? onPressed,
   }) {
     final isEnabled = onPressed != null;
@@ -357,20 +363,22 @@ class _AssessmentPageState extends State<AssessmentPage> {
           padding: const EdgeInsets.symmetric(vertical: 14),
           decoration: BoxDecoration(
             color: isEnabled
-                ? AppColors.lightestBrowm
+                ? AppColors.accentTeal.withAlpha(200)
                 : AppColors.lightestBrowm.withOpacity(0.4),
             borderRadius: BorderRadius.circular(12),
           ),
           child: Center(
-            child: Text(
-              label,
-              style: TextStyle(
-                color: isEnabled ? AppColors.brown : Colors.white54,
-                fontSize: 15,
-                fontWeight: FontWeight.w700,
-                letterSpacing: 0.5,
-              ),
-            ),
+            child: label,
+
+            // Text(
+            //   label,
+            //   style: TextStyle(
+            //     color: isEnabled ? AppColors.brown : Colors.white54,
+            //     fontSize: 15,
+            //     fontWeight: FontWeight.w700,
+            //     letterSpacing: 0.5,
+            //   ),
+            // ),
           ),
         ),
       ),
@@ -379,7 +387,7 @@ class _AssessmentPageState extends State<AssessmentPage> {
 
   /// Build secondary button
   Widget _buildSecondaryButton({
-    required String label,
+    // required IconData label,
     required VoidCallback onPressed,
   }) {
     return Material(
@@ -398,15 +406,20 @@ class _AssessmentPageState extends State<AssessmentPage> {
             borderRadius: BorderRadius.circular(12),
           ),
           child: Center(
-            child: Text(
-              label,
-              style: const TextStyle(
-                color: AppColors.lightestBrowm,
-                fontSize: 15,
-                fontWeight: FontWeight.w700,
-                letterSpacing: 0.5,
-              ),
+            child: Icon(
+              Icons.chevron_left_outlined,
+              color: AppColors.lightestBrowm,
             ),
+
+            // Text(
+            //   label,
+            //   style: const TextStyle(
+            //     color: AppColors.lightestBrowm,
+            //     fontSize: 15,
+            //     fontWeight: FontWeight.w700,
+            //     letterSpacing: 0.5,
+            //   ),
+            // ),
           ),
         ),
       ),

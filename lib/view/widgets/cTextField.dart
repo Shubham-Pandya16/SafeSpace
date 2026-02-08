@@ -6,6 +6,7 @@ class GlowingTextField extends StatefulWidget {
   final IconData icon;
   final TextEditingController textController;
   final bool isPassword;
+  final bool isChatBot;
   final Color borderColor;
 
   const GlowingTextField({
@@ -15,6 +16,7 @@ class GlowingTextField extends StatefulWidget {
     required this.textController,
     this.isPassword = false,
     this.borderColor = AppColors.green,
+    this.isChatBot = false,
   });
 
   @override
@@ -65,7 +67,7 @@ class _GlowingTextFieldState extends State<GlowingTextField> {
       keyboardType: TextInputType.emailAddress,
       obscureText: widget.isPassword,
       style: const TextStyle(color: Colors.white, fontSize: 16),
-      maxLines: null,
+      maxLines: widget.isChatBot ? null : 1,
       minLines: 1,
       decoration: InputDecoration(
         hintText: widget.hint,

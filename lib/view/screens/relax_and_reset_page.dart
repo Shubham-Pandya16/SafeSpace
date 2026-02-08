@@ -2,8 +2,6 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 
-import '../../model/colors.dart';
-
 enum ExerciseType { box, fourSevenEight }
 
 enum PhaseType { inhale, hold, exhale }
