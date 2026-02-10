@@ -22,7 +22,7 @@ const List<String> standardOptions = [
 ];
 
 const List<Question> mentalHealthQuestionnaire = [
-  //  PHQ-9 (Depression)
+  //  PHQ-9 (Depression) - 7 questions
   Question(
     id: "phq1",
     text: "Little interest or pleasure in doing things",
@@ -48,12 +48,6 @@ const List<Question> mentalHealthQuestionnaire = [
     scale: ScaleType.phq9,
   ),
   Question(
-    id: "phq5",
-    text: "Poor appetite or overeating",
-    options: standardOptions,
-    scale: ScaleType.phq9,
-  ),
-  Question(
     id: "phq6",
     text:
         "Feeling bad about yourself — or that you are a failure or have let yourself or your family down",
@@ -68,20 +62,13 @@ const List<Question> mentalHealthQuestionnaire = [
     scale: ScaleType.phq9,
   ),
   Question(
-    id: "phq8",
-    text:
-        "Moving or speaking so slowly that others could have noticed, or being unusually restless",
-    options: standardOptions,
-    scale: ScaleType.phq9,
-  ),
-  Question(
     id: "phq9",
     text: "Thoughts that you would be better off dead, or of hurting yourself",
     options: standardOptions,
     scale: ScaleType.phq9,
   ),
 
-  //  GAD-7 (Anxiety)
+  //  GAD-7 (Anxiety) - 6 questions
   Question(
     id: "gad1",
     text: "Feeling nervous, anxious, or on edge",
@@ -107,12 +94,6 @@ const List<Question> mentalHealthQuestionnaire = [
     scale: ScaleType.gad7,
   ),
   Question(
-    id: "gad5",
-    text: "Being so restless that it is hard to sit still",
-    options: standardOptions,
-    scale: ScaleType.gad7,
-  ),
-  Question(
     id: "gad6",
     text: "Becoming easily annoyed or irritable",
     options: standardOptions,
@@ -125,22 +106,10 @@ const List<Question> mentalHealthQuestionnaire = [
     scale: ScaleType.gad7,
   ),
 
-  //  DASS-21 (Depression)
+  //  DASS-21 (Depression, Anxiety, Stress) - 7 questions
   Question(
     id: "dassD1",
-    text: "I couldn’t seem to experience any positive feeling at all",
-    options: standardOptions,
-    scale: ScaleType.dassDepression,
-  ),
-  Question(
-    id: "dassD2",
-    text: "I found it difficult to work up the initiative to do things",
-    options: standardOptions,
-    scale: ScaleType.dassDepression,
-  ),
-  Question(
-    id: "dassD3",
-    text: "I felt that I had nothing to look forward to",
+    text: "I couldn't seem to experience any positive feeling at all",
     options: standardOptions,
     scale: ScaleType.dassDepression,
   ),
@@ -151,46 +120,8 @@ const List<Question> mentalHealthQuestionnaire = [
     scale: ScaleType.dassDepression,
   ),
   Question(
-    id: "dassD5",
-    text: "I was unable to become enthusiastic about anything",
-    options: standardOptions,
-    scale: ScaleType.dassDepression,
-  ),
-  Question(
-    id: "dassD6",
-    text: "I felt I wasn’t worth much as a person",
-    options: standardOptions,
-    scale: ScaleType.dassDepression,
-  ),
-  Question(
-    id: "dassD7",
-    text: "I felt that life was meaningless",
-    options: standardOptions,
-    scale: ScaleType.dassDepression,
-  ),
-
-  //  DASS-21 (Anxiety)
-  Question(
     id: "dassA1",
     text: "I was aware of dryness of my mouth",
-    options: standardOptions,
-    scale: ScaleType.dassAnxiety,
-  ),
-  Question(
-    id: "dassA2",
-    text: "I experienced breathing difficulty",
-    options: standardOptions,
-    scale: ScaleType.dassAnxiety,
-  ),
-  Question(
-    id: "dassA3",
-    text: "I experienced trembling",
-    options: standardOptions,
-    scale: ScaleType.dassAnxiety,
-  ),
-  Question(
-    id: "dassA4",
-    text: "I was worried about situations in which I might panic",
     options: standardOptions,
     scale: ScaleType.dassAnxiety,
   ),
@@ -201,28 +132,8 @@ const List<Question> mentalHealthQuestionnaire = [
     scale: ScaleType.dassAnxiety,
   ),
   Question(
-    id: "dassA6",
-    text: "I was aware of the action of my heart",
-    options: standardOptions,
-    scale: ScaleType.dassAnxiety,
-  ),
-  Question(
-    id: "dassA7",
-    text: "I felt scared without any good reason",
-    options: standardOptions,
-    scale: ScaleType.dassAnxiety,
-  ),
-
-  //  DASS-21 (Stress)
-  Question(
     id: "dassS1",
     text: "I found it hard to wind down",
-    options: standardOptions,
-    scale: ScaleType.dassStress,
-  ),
-  Question(
-    id: "dassS2",
-    text: "I tended to over-react to situations",
     options: standardOptions,
     scale: ScaleType.dassStress,
   ),
@@ -233,26 +144,8 @@ const List<Question> mentalHealthQuestionnaire = [
     scale: ScaleType.dassStress,
   ),
   Question(
-    id: "dassS4",
-    text: "I found myself getting agitated",
-    options: standardOptions,
-    scale: ScaleType.dassStress,
-  ),
-  Question(
     id: "dassS5",
     text: "I found it difficult to relax",
-    options: standardOptions,
-    scale: ScaleType.dassStress,
-  ),
-  Question(
-    id: "dassS6",
-    text: "I was intolerant of anything that kept me from getting on",
-    options: standardOptions,
-    scale: ScaleType.dassStress,
-  ),
-  Question(
-    id: "dassS7",
-    text: "I felt that I was rather touchy",
     options: standardOptions,
     scale: ScaleType.dassStress,
   ),

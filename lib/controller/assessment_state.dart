@@ -79,9 +79,9 @@ class AssessmentState extends ChangeNotifier {
       }
     });
 
-    final phq9Normalized = (phq9Score / 27 * 33.33).toInt();
-    final gad7Normalized = (gad7Score / 21 * 33.33).toInt();
-    final dassNormalized = (dassScore / 63 * 33.34).toInt();
+    final phq9Normalized = (phq9Score / 21 * 33.33).toInt();
+    final gad7Normalized = (gad7Score / 18 * 33.33).toInt();
+    final dassNormalized = (dassScore / 21 * 33.34).toInt();
 
     final totalScore = phq9Normalized + gad7Normalized + dassNormalized;
 

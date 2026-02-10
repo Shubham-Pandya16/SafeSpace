@@ -1,7 +1,34 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:safe_space/controller/assessment_state.dart';
 import 'package:safe_space/model/colors.dart';
 import 'package:safe_space/view/screens/assessment_result_page.dart';
+
+// Encouragement messages by stage
+const Map<String, List<String>> _encouragementMessages = {
+  'early': [
+    "You're doing fine. Take your time.",
+    "Every answer brings you closer to understanding yourself.",
+    "This is a safe space for honest reflection.",
+    "You're taking an important step toward self-awareness.",
+  ],
+  'mid': [
+    "Keep going. You're learning about yourself.",
+    "Halfway there. You're doing great.",
+    "Pace yourself. This is about understanding, not rushing.",
+    "Your honesty is valuable.",
+  ],
+  'late': [
+    "You're almost there.",
+    "Just a few more to go. You've got this.",
+    "The finish line is in sight.",
+    "Nearly done. Thank you for taking this seriously.",
+  ],
+};
+
+// Question indices where message should appear (0-indexed)
+const List<int> _messageQuestionIndices = [3, 8, 13, 18];
 
 class AssessmentPage extends StatefulWidget {
   const AssessmentPage({super.key});
@@ -12,12 +39,14 @@ class AssessmentPage extends StatefulWidget {
 
 class _AssessmentPageState extends State<AssessmentPage> {
   late AssessmentState _assessmentState;
+  String? _currentMessage;
 
   @override
   void initState() {
     super.initState();
     _assessmentState = AssessmentState();
     _assessmentState.addListener(_onStateChanged);
+    _updateMessage();
   }
 
   @override
@@ -28,7 +57,32 @@ class _AssessmentPageState extends State<AssessmentPage> {
   }
 
   void _onStateChanged() {
+    _updateMessage();
     setState(() {});
+  }
+
+  void _updateMessage() {
+    if (_messageQuestionIndices.contains(
+      _assessmentState.currentQuestionIndex,
+    )) {
+      _currentMessage = _getRandomMessage(
+        _assessmentState.currentQuestionIndex,
+      );
+    } else {
+      _currentMessage = null;
+    }
+  }
+
+  String _getRandomMessage(int questionIndex) {
+    String stage = 'early';
+    if (questionIndex >= 14) {
+      stage = 'late';
+    } else if (questionIndex >= 7) {
+      stage = 'mid';
+    }
+
+    final messages = _encouragementMessages[stage]!;
+    return messages[Random().nextInt(messages.length)];
   }
 
   @override
@@ -64,7 +118,7 @@ class _AssessmentPageState extends State<AssessmentPage> {
 
                     // Current question
                     _buildQuestion(_assessmentState),
-                    const SizedBox(height: 32),
+                    const SizedBox(height: 20),
 
                     // Radio options
                     _buildRadioOptions(context, _assessmentState),
@@ -72,6 +126,15 @@ class _AssessmentPageState extends State<AssessmentPage> {
                 ),
               ),
             ),
+
+            // Encouragement message
+            if (_currentMessage != null) ...[
+              const SizedBox(height: 25),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 24),
+                child: _buildEncouragementMessage(_currentMessage!),
+              ),
+            ],
 
             // Navigation buttons
             _buildNavigation(context, _assessmentState),
@@ -190,6 +253,45 @@ class _AssessmentPageState extends State<AssessmentPage> {
           ),
         ),
       ],
+    );
+  }
+
+  /// Build encouragement message with fade-in animation
+  Widget _buildEncouragementMessage(String message) {
+    return AnimatedOpacity(
+      opacity: 1.0,
+      duration: const Duration(milliseconds: 500),
+      child: Container(
+        padding: const EdgeInsets.all(12),
+        decoration: BoxDecoration(
+          color: AppColors.green.withOpacity(0.15),
+          borderRadius: BorderRadius.circular(8),
+          border: Border.all(color: AppColors.green.withOpacity(0.3), width: 1),
+        ),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Icon(
+              Icons.favorite_border,
+              color: AppColors.green.withOpacity(0.9),
+              size: 18,
+            ),
+            const SizedBox(width: 12),
+            Expanded(
+              child: Text(
+                message,
+                style: TextStyle(
+                  color: AppColors.green.withOpacity(0.9),
+                  fontSize: 13,
+                  fontWeight: FontWeight.w500,
+                  height: 1.4,
+                  fontStyle: FontStyle.italic,
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 

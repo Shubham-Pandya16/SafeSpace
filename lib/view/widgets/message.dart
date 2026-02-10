@@ -13,12 +13,14 @@ class Messages extends StatelessWidget {
   final bool isUser;
   final String message;
   final String? date;
+  final String? username;
 
   const Messages({
     super.key,
     required this.isUser,
     required this.message,
     this.date,
+    this.username,
   });
 
   @override
@@ -52,16 +54,31 @@ class Messages extends StatelessWidget {
               color: isUser ? Colors.white70 : Colors.white,
             ),
           ),
-          if (date != null)
+          if (date != null || (username != null && !isUser))
             Padding(
-              padding: const EdgeInsets.only(top: 6),
-              child: Text(
-                date!,
-                style: TextStyle(
-                  fontSize: 12,
-                  fontWeight: FontWeight.bold,
-                  color: isUser ? Colors.white54 : Colors.white70,
-                ),
+              padding: const EdgeInsets.only(top: 8),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  if (username != null && !isUser)
+                    Text(
+                      username!,
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 11,
+                        color: Colors.white70,
+                      ),
+                    ),
+                  if (date != null)
+                    Text(
+                      date!,
+                      style: TextStyle(
+                        fontSize: 11,
+                        fontWeight: FontWeight.bold,
+                        color: isUser ? Colors.white54 : Colors.white70,
+                      ),
+                    ),
+                ],
               ),
             ),
         ],

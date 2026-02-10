@@ -31,6 +31,22 @@ class _GroupchatPageState extends State<GroupchatPage> {
     }
   }
 
+  Future<String?> _getUsernameFromSenderID(String senderID) async {
+    try {
+      final docSnapshot = await FirebaseFirestore.instance
+          .collection('users')
+          .doc(senderID)
+          .get();
+      
+      if (docSnapshot.exists) {
+        return docSnapshot.get('username') as String?;
+      }
+    } catch (e) {
+      print('Error fetching username: $e');
+    }
+    return null;
+  }
+
   final TextEditingController _userInput = TextEditingController();
 
   void _sendMessage() async {
@@ -142,15 +158,23 @@ class _GroupchatPageState extends State<GroupchatPage> {
                       itemBuilder: (context, index) {
                         final data =
                             messages[index].data() as Map<String, dynamic>;
+                        final senderID = data['senderID'];
+                        final isCurrentUser = _isUser(senderID);
 
-                        return Messages(
-                          message: data['text'] ?? '',
-                          isUser: _isUser(data['senderID']),
-                          date: data['timestamp'] != null
-                              ? DateFormat('hh:mm aa • dd MMM').format(
-                                  (data['timestamp'] as Timestamp).toDate(),
-                                )
-                              : null,
+                        return FutureBuilder<String?>(
+                          future: isCurrentUser ? Future.value(null) : _getUsernameFromSenderID(senderID),
+                          builder: (context, snapshot) {
+                            return Messages(
+                              message: data['text'] ?? '',
+                              isUser: isCurrentUser,
+                              date: data['timestamp'] != null
+                                  ? DateFormat('hh:mm aa • dd MMM').format(
+                                      (data['timestamp'] as Timestamp).toDate(),
+                                    )
+                                  : null,
+                              username: snapshot.data,
+                            );
+                          },
                         );
                       },
                     );

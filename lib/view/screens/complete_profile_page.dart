@@ -22,12 +22,20 @@ class _CompleteProfilePageState extends State<CompleteProfilePage> {
   bool _isLoading = false;
 
   final List<String> departments = [
-    'Computer Engineering',
-    'Information Technology',
-    'ICT',
-    'Mechanical',
-    'Civil',
-    'Electrical',
+    'Aerospace Engineering',
+    'Bioengineering',
+    'Computer Science & Engineering',
+    'Computer Science & Engineering (Artificial Intelligence & Machine Learning)',
+    'Computer Science & Engineering (Cyber Security & Digital Forensics)',
+    'Computer Science & Engineering (Cloud Computing & Automation)',
+    'Computer Science & Engineering (E-Commerce Technology)',
+    'Computer Science & Engineering (Education Technology)',
+    'Computer Science & Engineering (Gaming Technology)',
+    'Computer Science & Engineering (Health Informatics)',
+    'Electronics & Communication Engineering',
+    'Electronics & Communication Engineering (Artificial Intelligence & Cybernetics)',
+    'Mechanical Engineering',
+    'Mechanical Engineering (Artificial Intelligence & Robotics)',
   ];
 
   @override
@@ -253,17 +261,29 @@ class _CompleteProfilePageState extends State<CompleteProfilePage> {
 
   Widget _buildDepartmentDropdown() {
     return DropdownButtonFormField<String>(
+      isExpanded: true,
+      padding: EdgeInsets.fromLTRB(10, 0, 10, 12),
       dropdownColor: AppColors.mediumBrown,
       value: selectedDepartment,
-      hint: Text(
-        'Select your department',
-        style: TextStyle(color: Colors.white54, fontWeight: FontWeight.bold),
+      hint: Padding(
+        padding: const EdgeInsets.only(top: 8.0),
+        child: Text(
+          'Select your department',
+          style: TextStyle(color: Colors.white54, fontWeight: FontWeight.bold),
+        ),
       ),
       icon: Icon(Icons.arrow_drop_down, color: Colors.white70),
       items: departments.map((dept) {
         return DropdownMenuItem<String>(
           value: dept,
-          child: Text(dept, style: const TextStyle(color: Colors.white)),
+          child: Tooltip(
+            message: dept,
+            child: Text(
+              dept,
+              style: const TextStyle(color: Colors.white),
+              overflow: TextOverflow.visible,
+            ),
+          ),
         );
       }).toList(),
       onChanged: (value) {
