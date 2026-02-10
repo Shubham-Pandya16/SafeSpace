@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:safe_space/controller/auth_services.dart';
 import 'package:safe_space/model/colors.dart';
-import 'package:safe_space/view/screens/signup_page.dart';
+// AuthGate will provide navigation callbacks; avoid creating routes here
 import 'package:safe_space/view/widgets/cMaterialButton.dart';
 import 'package:safe_space/view/widgets/cTextField.dart';
 
 import '../widgets/cLogo.dart';
 
 class LoginPage extends StatefulWidget {
-  LoginPage({super.key});
+  final VoidCallback onCreateAccount;
+
+  const LoginPage({super.key, required this.onCreateAccount});
 
   @override
   State<LoginPage> createState() => _LoginPageState();
@@ -60,7 +62,7 @@ class _LoginPageState extends State<LoginPage> {
           image: DecorationImage(
             image: AssetImage('assets/chat_doodle.png'),
             repeat: ImageRepeat.repeat,
-            opacity: 0.5,
+            opacity: 0.7,
           ),
         ),
       ),
@@ -136,14 +138,7 @@ class _LoginPageState extends State<LoginPage> {
                           style: TextStyle(color: Colors.white),
                         ),
                         GestureDetector(
-                          onTap: () {
-                            Navigator.of(context).pushAndRemoveUntil(
-                              MaterialPageRoute(
-                                builder: (context) => SignupPage(),
-                              ),
-                              (Route<dynamic> route) => false,
-                            );
-                          },
+                          onTap: widget.onCreateAccount,
                           child: Text(
                             " Sign Up Now",
                             style: TextStyle(color: AppColors.green),

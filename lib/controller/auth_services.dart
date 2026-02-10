@@ -1,7 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:safe_space/controller/floating_snackbar_service.dart';
+
+import 'floating_snackbar_service.dart';
 
 class AuthController {
   final FirebaseAuth _authService = FirebaseAuth.instance;
@@ -91,10 +92,7 @@ class AuthController {
       }
     } catch (e) {
       if (context.mounted) {
-        FloatingSnackbarService.showError(
-          context,
-          "Failed to create account",
-        );
+        FloatingSnackbarService.showError(context, "Failed to create account");
       }
     }
   }
@@ -111,10 +109,7 @@ class AuthController {
       }
     } catch (e) {
       if (context.mounted) {
-        FloatingSnackbarService.showError(
-          context,
-          "Failed to log out",
-        );
+        FloatingSnackbarService.showError(context, "Failed to log out");
       }
     }
   }

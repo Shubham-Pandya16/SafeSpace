@@ -8,6 +8,7 @@ class GlowingTextField extends StatefulWidget {
   final bool isPassword;
   final bool isChatBot;
   final Color borderColor;
+  final TextInputType keyboardType;
 
   const GlowingTextField({
     super.key,
@@ -17,6 +18,7 @@ class GlowingTextField extends StatefulWidget {
     this.isPassword = false,
     this.borderColor = AppColors.green,
     this.isChatBot = false,
+    this.keyboardType = TextInputType.emailAddress,
   });
 
   @override
@@ -64,7 +66,7 @@ class _GlowingTextFieldState extends State<GlowingTextField> {
     TextFormField(
       // focusNode: _focusNode,
       controller: widget.textController,
-      keyboardType: TextInputType.emailAddress,
+      keyboardType: widget.keyboardType,
       obscureText: widget.isPassword,
       style: const TextStyle(color: Colors.white, fontSize: 16),
       maxLines: widget.isChatBot ? null : 1,

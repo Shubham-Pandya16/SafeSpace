@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:safe_space/model/colors.dart';
+import 'package:safe_space/view/screens/home_page.dart';
 
 class AssessmentResultPage extends StatefulWidget {
   final int score;
@@ -382,7 +383,10 @@ class _AssessmentResultPageState extends State<AssessmentResultPage> {
       height: 56,
       child: MaterialButton(
         onPressed: () {
-          Navigator.pop(context);
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (_) => const HomePage()),
+          );
         },
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(28)),
         color: AppColors.lightestBrowm,

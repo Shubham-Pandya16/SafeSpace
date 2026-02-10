@@ -33,12 +33,10 @@ class _ChannelsPageState extends State<ChannelsPage> {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.vertical(bottom: Radius.circular(25)),
         ),
-        // keep AppBar layout as-is but change color to primary calm blue
         backgroundColor: AppColors.brown,
       ),
       body: Column(
         children: [
-          // Small informational header
           Padding(
             padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
             child: Container(
@@ -73,7 +71,6 @@ class _ChannelsPageState extends State<ChannelsPage> {
             ),
           ),
 
-          // Group list (keeps Firestore stream and navigation intact)
           Expanded(
             child: StreamBuilder<QuerySnapshot>(
               stream: FirebaseFirestore.instance

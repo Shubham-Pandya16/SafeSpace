@@ -10,12 +10,14 @@ class VideoResource {
   final String name;
   final String url;
   final String lang;
+  final String imgUrl;
 
   VideoResource({
     required this.id,
     required this.name,
     required this.url,
     required this.lang,
+    required this.imgUrl,
   });
 
   factory VideoResource.fromFirestore(String docId, Map<String, dynamic> data) {
@@ -24,6 +26,7 @@ class VideoResource {
       name: data['name'] ?? 'Untitled',
       url: data['url'] ?? '',
       lang: data['lang'] ?? 'Unknown',
+      imgUrl: data['imgUrl'] ?? 'Unknown',
     );
   }
 }
@@ -270,25 +273,19 @@ class _MindfulResourcesPageState extends State<MindfulResourcesPage> {
                   topRight: Radius.circular(16),
                 ),
               ),
-              child: Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Icon(
+              child: Stack(
+                children: [
+                  Positioned.fill(
+                    child: Image.network(video.imgUrl, fit: BoxFit.cover),
+                  ),
+                  Center(
+                    child: Icon(
                       Icons.play_circle_outline,
                       size: 48,
                       color: AppColors.mediumBrown.withOpacity(0.6),
                     ),
-                    const SizedBox(height: 8),
-                    Text(
-                      'Featured Video',
-                      style: TextStyle(
-                        color: AppColors.mediumBrown.withOpacity(0.6),
-                        fontSize: 12,
-                      ),
-                    ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             ),
 
@@ -374,12 +371,19 @@ class _MindfulResourcesPageState extends State<MindfulResourcesPage> {
                   bottomLeft: Radius.circular(12),
                 ),
               ),
-              child: Center(
-                child: Icon(
-                  Icons.play_circle_outline,
-                  size: 32,
-                  color: AppColors.mediumBrown.withOpacity(0.5),
-                ),
+              child: Stack(
+                children: [
+                  Positioned.fill(
+                    child: Image.network(video.imgUrl, fit: BoxFit.cover),
+                  ),
+                  Center(
+                    child: Icon(
+                      Icons.play_circle_outline,
+                      size: 32,
+                      color: AppColors.mediumBrown.withOpacity(0.5),
+                    ),
+                  ),
+                ],
               ),
             ),
 

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:safe_space/controller/floating_snackbar_service.dart';
 import 'package:safe_space/model/colors.dart';
-import 'package:safe_space/view/screens/login_page.dart';
+// AuthGate will provide callbacks to switch views; avoid creating routes here
 import 'package:safe_space/view/widgets/cLogo.dart';
 import 'package:safe_space/view/widgets/cMaterialButton.dart';
 import 'package:safe_space/view/widgets/cTextField.dart';
@@ -9,7 +9,9 @@ import 'package:safe_space/view/widgets/cTextField.dart';
 import '../../controller/auth_services.dart';
 
 class SignupPage extends StatefulWidget {
-  SignupPage({super.key});
+  final VoidCallback onBackToLogin;
+
+  const SignupPage({super.key, required this.onBackToLogin});
 
   @override
   State<SignupPage> createState() => _SignupPageState();
@@ -51,6 +53,8 @@ class _SignupPageState extends State<SignupPage> {
       );
       // Clear fields on successful signup
       if (mounted) {
+        // AuthGate will automatically route to complete profile or home
+        // based on profile completion status
         emailController.clear();
         passwordController.clear();
         confirmPasswordController.clear();
@@ -70,7 +74,7 @@ class _SignupPageState extends State<SignupPage> {
           image: DecorationImage(
             image: AssetImage('assets/chat_doodle.png'),
             repeat: ImageRepeat.repeat,
-            opacity: 0.5,
+            opacity: 0.7,
           ),
         ),
       ),
@@ -166,14 +170,7 @@ class _SignupPageState extends State<SignupPage> {
                             style: TextStyle(color: Colors.white),
                           ),
                           GestureDetector(
-                            onTap: () {
-                              Navigator.of(context).pushAndRemoveUntil(
-                                MaterialPageRoute(
-                                  builder: (context) => LoginPage(),
-                                ),
-                                (Route<dynamic> route) => false,
-                              );
-                            },
+                            onTap: widget.onBackToLogin,
                             child: Text(
                               " Sign In Now",
                               style: TextStyle(color: AppColors.green),

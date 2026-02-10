@@ -5,6 +5,7 @@ import 'package:safe_space/view/screens/assessment_page.dart';
 import 'package:safe_space/view/screens/channels_page.dart';
 import 'package:safe_space/view/screens/chatbot_page.dart';
 import 'package:safe_space/view/screens/relax_and_reset_page.dart';
+import 'package:safe_space/view/screens/splash_screen.dart';
 import 'package:safe_space/view/widgets/cLogo.dart';
 import 'package:safe_space/view/widgets/mindful_resources_page.dart';
 
@@ -95,6 +96,10 @@ class _HomePageState extends State<HomePage> {
       title: GestureDetector(
         onLongPress: () {
           _authController.signOut(context);
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (_) => const SplashScreen()),
+          );
         },
         child: Padding(
           padding: const EdgeInsets.only(bottom: 15.0),
