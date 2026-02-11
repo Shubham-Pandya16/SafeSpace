@@ -1,16 +1,38 @@
-# safe_space
+# SafeSpace
 
-Mental Health Companion
+A student-centric digital mental health and psychological support application built using Flutter & Firebase.
 
-## Getting Started
+## Features
 
-This project is a starting point for a Flutter application.
+#### Student Application
+- Secure Authentication (using Firebase Authentication)
+- Mental Health Assessment (Psychological Screening Tools like PHQ-9, GAD-7, DASS-21)
+- SafeSpace.AI mental health companion chatbot (a personalized AI chatbot)
+- Anonymous community groupchat for students (provided with channels)
+- Clean, distraction-free UI
 
-A few resources to get you started if this is your first Flutter project:
+#### Admin Panel
+- User growth & registration trends
+- Assessment participation metrics
+- Average mental health score trends
+- Department-wise & semester-wise insights
+  
+## Tech Stack
+#### Mobile Application
+- Frontend: Flutter (Dart)
+- Backend: Firebase
+- Authentication: Firebase Authentication
+- Database: Cloud Firestore
+- Architecture: AuthGate-driven state routing
+- UI: Material Design + custom components
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+#### Web Dashboard
+Frontend:
+- HTML5
+- Tailwind CSS
+- JavaScript
+- Chart.js
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+Backend:
+- PHP: Server-side handling
+- Firebase Firestore
