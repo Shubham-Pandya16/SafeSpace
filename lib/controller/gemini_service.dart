@@ -16,7 +16,7 @@ class GeminiService {
     );
   }
 
-  /// Generate response with memory context
+  
   Future<String> generateResponse({
     required String systemPrompt,
     required String userMessage,
@@ -45,7 +45,7 @@ $userMessage
     }
   }
 
-  /// Generate conversation summary
+  
   Future<String> generateSummary({
     required String conversationText,
   }) async {

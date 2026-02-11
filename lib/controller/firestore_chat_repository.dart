@@ -4,7 +4,7 @@ import 'package:safe_space/model/chat_message.dart';
 class FirestoreChatRepository {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
-  /// Save a message to Firestore
+  
   Future<String> saveMessage({
     required String userId,
     required String role,
@@ -28,7 +28,7 @@ class FirestoreChatRepository {
     }
   }
 
-  /// Fetch last N messages in chronological order
+  
   Future<List<ChatMessage>> fetchRecentMessages({
     required String userId,
     int limit = 10,
@@ -56,7 +56,7 @@ class FirestoreChatRepository {
     }
   }
 
-  /// Get total message count
+  
   Future<int> getMessageCount({required String userId}) async {
     try {
       final snapshot = await _firestore
@@ -74,7 +74,7 @@ class FirestoreChatRepository {
     }
   }
 
-  /// Get user profile summary
+  
   Future<UserProfile?> getUserProfile({required String userId}) async {
     try {
       final doc = await _firestore
@@ -92,7 +92,7 @@ class FirestoreChatRepository {
     }
   }
 
-  /// Update user profile summary
+  
   Future<void> updateProfileSummary({
     required String userId,
     required String summary,
@@ -107,7 +107,7 @@ class FirestoreChatRepository {
     }
   }
 
-  /// Get all messages for summary generation
+  
   Future<List<ChatMessage>> getAllMessages({required String userId}) async {
     try {
       final snapshot = await _firestore
@@ -127,7 +127,7 @@ class FirestoreChatRepository {
     }
   }
 
-  /// Delete all messages (cleanup)
+  
   Future<void> clearChatHistory({required String userId}) async {
     try {
       final collection = _firestore
