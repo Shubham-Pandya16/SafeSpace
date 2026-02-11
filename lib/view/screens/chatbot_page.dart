@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:google_generative_ai/google_generative_ai.dart';
+import 'package:safe_space/controller/chat_service.dart';
 import 'package:safe_space/model/colors.dart';
 import 'package:safe_space/view/widgets/cLogo.dart';
 import 'package:safe_space/view/widgets/cTextField.dart';
 
-import '../../controller/apiKey.dart';
-import '../../model/system_prompt.dart';
 import '../widgets/cText.dart';
 import '../widgets/message.dart';
 
@@ -19,18 +17,27 @@ class ChatBotPage extends StatefulWidget {
 class _ChatBotPageState extends State<ChatBotPage> {
   final TextEditingController _userInput = TextEditingController();
   final ScrollController _scrollController = ScrollController();
+  final ChatService _chatService = ChatService();
 
   final List<Message> _messages = [];
   bool _isThinking = false;
+
+  @override
+  void initState() {
+    super.initState();
+    // Chat history is loaded internally by ChatService for context
+    // but not displayed in the UI - fresh start for each session
+  }
+
   Widget _buildChatBackground() {
     return Positioned.fill(
       child: Container(
         decoration: BoxDecoration(
-          color: AppColors.brown, // base color
+          color: AppColors.brown,
           image: DecorationImage(
             image: AssetImage('assets/chat_doodle.png'),
             repeat: ImageRepeat.repeat,
-            opacity: 0.7, // VERY important
+            opacity: 0.7,
           ),
         ),
       ),
@@ -49,21 +56,27 @@ class _ChatBotPageState extends State<ChatBotPage> {
     });
   }
 
+  void _showErrorSnackbar(String message) {
+    if (!mounted) return;
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(message),
+        backgroundColor: Colors.red,
+      ),
+    );
+  }
+
   Future<void> geminiResponseCall() async {
     final userInputMessage = _userInput.text.trim();
     if (userInputMessage.isEmpty || _isThinking) return;
 
-    final finalPrompt =
-        """
-$systemPrompt
-
-User Message:
-$userInputMessage
-""";
-
     setState(() {
       _messages.add(
-        Message(isUser: true, message: userInputMessage, date: DateTime.now()),
+        Message(
+          isUser: true,
+          message: userInputMessage,
+          date: DateTime.now(),
+        ),
       );
       _isThinking = true;
     });
@@ -72,37 +85,40 @@ $userInputMessage
     _scrollToBottom();
 
     try {
-      final model = GenerativeModel(
-        model: 'gemini-2.5-flash',
-        apiKey: await fetchApiKeyFromFirestore(),
+      final response = await _chatService.sendMessage(
+        userMessage: userInputMessage,
       );
 
-      final content = Content.text(finalPrompt);
-      final response = await model.generateContent([content]);
-
-      setState(() {
-        _messages.add(
-          Message(
-            isUser: false,
-            message: response.text ?? "I’m here with you.",
-            date: DateTime.now(),
-          ),
-        );
-      });
+      if (mounted) {
+        setState(() {
+          _messages.add(
+            Message(
+              isUser: false,
+              message: response,
+              date: DateTime.now(),
+            ),
+          );
+        });
+      }
     } catch (e) {
-      setState(() {
-        _messages.add(
-          Message(
-            isUser: false,
-            message: "Something went wrong. Try again in a moment.",
-            date: DateTime.now(),
-          ),
-        );
-      });
+      if (mounted) {
+        setState(() {
+          _messages.add(
+            Message(
+              isUser: false,
+              message: "Something went wrong. Try again in a moment.",
+              date: DateTime.now(),
+            ),
+          );
+        });
+        _showErrorSnackbar('Error: ${e.toString()}');
+      }
     } finally {
-      setState(() {
-        _isThinking = false;
-      });
+      if (mounted) {
+        setState(() {
+          _isThinking = false;
+        });
+      }
       _scrollToBottom();
     }
   }
@@ -119,16 +135,7 @@ $userInputMessage
     return Scaffold(
       resizeToAvoidBottomInset: true,
       backgroundColor: AppColors.brown,
-
       appBar: AppBar(
-        // leading: GestureDetector(
-        //   onTap: () => Navigator.pop(context),
-        //   child: const Icon(
-        //     Icons.arrow_back_ios_new,
-        //     size: 20,
-        //     color: Colors.grey,
-        //   ),
-        // ),
         leading: Container(),
         toolbarHeight: 75,
         title: Column(
@@ -147,7 +154,6 @@ $userInputMessage
         ),
         backgroundColor: AppColors.mediumBrown,
       ),
-
       body: Stack(
         children: [
           _buildChatBackground(),
@@ -175,7 +181,6 @@ $userInputMessage
                   },
                 ),
               ),
-
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
                 child: Row(
@@ -200,7 +205,6 @@ $userInputMessage
                   ],
                 ),
               ),
-
               const SizedBox(height: 10),
             ],
           ),
