@@ -19,6 +19,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         textTheme: GoogleFonts.urbanistTextTheme(Typography.englishLike2021),
       ),
+      // Directly opens with SplashScreen then to AuthGate then to MainNavigation
       home: SplashScreen(),
     );
   }
